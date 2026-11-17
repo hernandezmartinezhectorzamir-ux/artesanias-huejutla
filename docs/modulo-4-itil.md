@@ -132,6 +132,7 @@ Controles: nonces en todos los formularios, límite de intentos por IP en la con
 - Cada reporte registra: **periodo, fuentes** (Analytics, Search Console, rendimiento, disponibilidad, errores, tickets, opiniones), **fase PDCA**, problema detectado, evidencia, propuesta, **responsable**, fecha compromiso, indicador/meta, **resultado** y acción siguiente.
 - El editor muestra, como referencia, **datos reales** del sistema de los últimos 30 días: tickets, fuera de SLA, cumplimiento de SLA, disponibilidad y tiempo de respuesta.
 - Plantilla para el reporte periódico: [plantillas/reporte-mejora-continua.md](plantillas/reporte-mejora-continua.md).
+- **Primer reporte con datos reales:** [mejora-continua/reporte-2026-11.md](mejora-continua/reporte-2026-11.md) (monitoreo, velocidad antes y después de la caché, errores de PHP y tickets; GA4 y Search Console marcados como *No disponible* hasta que se publique el sitio). También está capturado en WordPress como reporte PDCA en fase *Verificar*.
 
 | Fase | Qué se hace en Artesanías Huejutla |
 |---|---|

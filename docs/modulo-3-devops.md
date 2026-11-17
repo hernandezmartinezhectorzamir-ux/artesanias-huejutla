@@ -136,6 +136,28 @@ Sin muestras, el panel muestra "—" en lugar de cifras inventadas (verificado c
 | MTTR | ≤ 30 min |
 | Lighthouse rendimiento / SEO | ≥ 80 / ≥ 95 |
 
+### 5.4 Optimización multinivel (caché)
+
+| Nivel | Estado en local | Producción |
+|---|---|---|
+| Caché de página | **Activa**: WP Super Cache en modo PHP, con expiración de 1 h | Igual, o caché del servidor (LiteSpeed/Nginx) |
+| Exclusiones | `/carrito/`, `/finalizar-compra/`, `/mi-cuenta/`, `/mis-compras/`, `/rastrear-pedido/`, `/mesa-de-ayuda/`, `/favoritos/`, `/contacto/`, `/wp-json/`, sitemaps y robots, además de las cookies `wordpress_logged_in`, `woocommerce_items_in_cart`, `wp_woocommerce_session` y `comment_author` | Igual |
+| Caché de navegador y compresión | No activas (`mod_expires`/`mod_deflate` apagados en XAMPP; no se tocaron porque afectan a todos los proyectos) | Activar |
+| Caché de código PHP (OPcache) | No activa en XAMPP | Activar |
+| Caché de objetos | No | Redis, si el plan lo permite |
+| Recursos estáticos | Versionados por fecha de modificación (`ah_tema_version_archivo`), imágenes WebP con carga diferida | Igual, más CDN opcional |
+
+**Medición real (TTFB con `curl`, 5 repeticiones, 17/11/2026):**
+
+| Página | Sin caché | Con caché |
+|---|---|---|
+| `/` | 1 910 ms | 25 ms |
+| `/tienda/` | 1 747 ms | 25 ms |
+| `/producto/canasta-de-palma-tejida/` | 1 710 ms | 27 ms |
+| `/blog/` | 1 625 ms | 25 ms |
+
+Con cookie de carrito o de sesión, y en `/carrito/`, la respuesta sigue siendo dinámica (1.5–1.9 s). Así se verifica que nadie recibe la página personalizada de otro usuario. El tablero de *Gestión TI* comprueba que la caché esté activa. El análisis completo está en [mejora-continua/reporte-2026-11.md](mejora-continua/reporte-2026-11.md).
+
 ## 6. Respaldos
 
 | Qué | Frecuencia | Retención | Cómo |
@@ -159,4 +181,4 @@ Restauración probada sugerida: una vez al mes, restaurar el respaldo en el ento
 ## 8. Hallazgos del entorno local
 
 - La MariaDB 10.4 de XAMPP no arrancaba (aserción de InnoDB en E/S asíncrona). Se inició con `--innodb-use-native-aio=0`, sin modificar `my.ini`. Para iniciarla desde el panel de XAMPP, agrega `innodb_use_native_aio = 0` en `[mysqld]`.
-- La tabla del sistema `mysql.db` de esa instalación está dañada (*wrong checksum*). No se reparó porque afecta los permisos de las otras bases (Joomla y Magento). El WordPress local usa `root`. **Recomendación:** respaldar y ejecutar `REPAIR TABLE mysql.db;`, y después crear un usuario dedicado.
+- La tabla del sistema `mysql.db` estaba dañada e impedía arrancar MySQL. El 17/11/2026 se respaldó y se reparó con `aria_chk -r`. Se restauró el permiso de `pma` sobre `phpmyadmin`; Joomla y Magento usan `root`, así que no se vieron afectados. El WordPress local sigue usando `root`; en producción debe usarse un usuario dedicado.
