@@ -109,6 +109,28 @@ final class AH_Instalador {
 			) {$charset};"
 		);
 
+		$suscriptores = $wpdb->prefix . 'ah_suscriptores';
+		dbDelta(
+			"CREATE TABLE {$suscriptores} (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				correo varchar(190) NOT NULL DEFAULT '',
+				user_id bigint(20) unsigned NOT NULL DEFAULT 0,
+				estado varchar(20) NOT NULL DEFAULT 'pendiente',
+				token char(32) NOT NULL DEFAULT '',
+				origen varchar(40) NOT NULL DEFAULT '',
+				ip_huella char(64) NOT NULL DEFAULT '',
+				correo_enviado tinyint(1) NOT NULL DEFAULT 0,
+				creado datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				consentimiento datetime NULL DEFAULT NULL,
+				confirmado datetime NULL DEFAULT NULL,
+				baja datetime NULL DEFAULT NULL,
+				PRIMARY KEY  (id),
+				UNIQUE KEY correo (correo),
+				KEY token (token),
+				KEY estado (estado)
+			) {$charset};"
+		);
+
 		update_option( 'ah_gti_db_version', AH_GTI_DB_VERSION, false );
 	}
 

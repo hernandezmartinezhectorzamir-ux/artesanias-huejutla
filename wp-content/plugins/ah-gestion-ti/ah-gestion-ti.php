@@ -17,7 +17,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'AH_GTI_VERSION', '1.0.0' );
-define( 'AH_GTI_DB_VERSION', '1.0' );
+define( 'AH_GTI_DB_VERSION', '1.1' );
 define( 'AH_GTI_ARCHIVO', __FILE__ );
 define( 'AH_GTI_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AH_GTI_URL', plugin_dir_url( __FILE__ ) );
@@ -38,6 +38,7 @@ require_once AH_GTI_DIR . 'includes/class-ah-favoritos.php';
 require_once AH_GTI_DIR . 'includes/class-ah-tablero.php';
 require_once AH_GTI_DIR . 'includes/class-ah-tienda.php';
 require_once AH_GTI_DIR . 'includes/class-ah-mis-compras.php';
+require_once AH_GTI_DIR . 'includes/class-ah-boletin.php';
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once AH_GTI_DIR . 'includes/class-ah-cli.php';
@@ -49,7 +50,8 @@ register_deactivation_hook( __FILE__, array( 'AH_Instalador', 'desactivar' ) );
 add_action(
 	'plugins_loaded',
 	static function () {
-		AH_Instalador::verificar_version();
+		// En init: el rol usa textos traducibles y las traducciones se cargan a partir de init.
+		add_action( 'init', array( 'AH_Instalador', 'verificar_version' ), 1 );
 		AH_Ajustes::iniciar();
 		AH_Mesa_Ayuda_Publica::iniciar();
 		AH_Mesa_Ayuda_Admin::iniciar();
@@ -63,6 +65,7 @@ add_action(
 		AH_Tablero::iniciar();
 		AH_Tienda::iniciar();
 		AH_Mis_Compras::iniciar();
+		AH_Boletin::iniciar();
 	}
 );
 

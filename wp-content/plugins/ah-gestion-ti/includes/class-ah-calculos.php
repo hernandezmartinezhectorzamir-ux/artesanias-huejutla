@@ -286,4 +286,26 @@ final class AH_Calculos {
 		list( $minimo, $maximo ) = $rangos[ $tipo ] ?? array( 3, 7 );
 		return array( self::sumar_dias_habiles( $desde, $minimo ), self::sumar_dias_habiles( $desde, $maximo ) );
 	}
+
+	/**
+	 * Valida un correo para el boletín (formato y longitud de la columna).
+	 *
+	 * @param string $correo Correo.
+	 * @return bool
+	 */
+	public static function correo_boletin_valido( $correo ) {
+		$correo = trim( (string) $correo );
+		return '' !== $correo && strlen( $correo ) <= 190 && false !== filter_var( $correo, FILTER_VALIDATE_EMAIL );
+	}
+
+	/**
+	 * Evita la inyección de fórmulas al abrir un CSV en Excel o Sheets.
+	 *
+	 * @param string $valor Celda.
+	 * @return string
+	 */
+	public static function csv_seguro( $valor ) {
+		$valor = (string) $valor;
+		return '' !== $valor && in_array( $valor[0], array( '=', '+', '-', '@', "\t", "\r" ), true ) ? "'" . $valor : $valor;
+	}
 }

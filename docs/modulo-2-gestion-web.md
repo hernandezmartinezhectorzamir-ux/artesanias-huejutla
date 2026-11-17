@@ -130,3 +130,16 @@ La verificación **no se simuló**: requiere el dominio público.
 | Conferencias web | URL de sala o agenda (Google Meet, Zoom, Teams o Calendly) configurable, con botón "Agendar videollamada" en contacto y en la mesa de ayuda |
 
 No se inventaron cuentas oficiales: los campos quedan vacíos hasta que el negocio capture las reales.
+
+## 6. Boletín de correo (`class-ah-boletin.php`)
+
+| Paso | Implementación |
+|---|---|
+| Suscripción | Franja "Recibe novedades de la Huasteca" en el pie de todas las páginas, o shortcode `[ah_boletin]` en cualquier página |
+| Consentimiento | Casilla obligatoria con enlace al aviso de privacidad. Se guardan la fecha del consentimiento y una huella HMAC de la IP (no la IP en claro) |
+| Doble confirmación | Se envía un correo con un enlace único (token aleatorio de 32 caracteres). El correo queda *Pendiente* hasta que la persona lo abre |
+| Baja | Cada correo incluye un enlace de baja de un clic. El administrador puede eliminar el registro definitivamente (derecho de cancelación) |
+| Seguridad | Nonce, honeypot, límite de 5 intentos por IP cada 10 minutos, validación del destino de regreso (sin redirecciones abiertas) y el mismo mensaje exista o no el correo (no revela quién está suscrito) |
+| Administración | *Gestión TI → Boletín*: conteos por estado, estado de envío del correo de confirmación, *Reenviar confirmación*, *Eliminar* y *Exportar CSV* (solo confirmados por defecto, con protección contra inyección de fórmulas) |
+
+**Límites:** el módulo **no envía campañas masivas**. Para enviar un boletín, se exporta el CSV de confirmados y se importa en un servicio de correo (Brevo, Mailchimp, MailerLite), que gestiona la entrega, los rebotes y las estadísticas. Los correos de confirmación usan `wp_mail()`, así que el hosting necesita SMTP. En el entorno local (XAMPP sin SMTP) el panel muestra con honestidad "No se pudo enviar".

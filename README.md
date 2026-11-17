@@ -129,6 +129,7 @@ Pasarelas con tarjeta **preparadas, sin credenciales**: Mercado Pago, Stripe o P
 - **Tienda:** catálogo con búsqueda, filtros por categoría y rango de precio, ordenamiento, fichas con galería y zoom, atributos (materiales, lugar de elaboración y medidas), existencias, relacionados, favoritos y botones para compartir.
 - **Compra:** carrito con cupones y barra de envío gratis, checkout clásico, envíos (estándar $120, express $220, gratis desde $999, recoger en taller) y Mi cuenta con la sección *Soporte*.
 - **Mis compras:** seguimiento de cada pedido (Compra confirmada → En preparación → En camino → Entregado) con fecha y hora de cada etapa, fecha estimada en días hábiles e indicador *A tiempo/Retrasado*, panel lateral con línea de tiempo, paquetería y número de guía, notificaciones en la campana del encabezado, correo al salir a ruta, botones *Ayuda con mi compra*, *Volver a comprar*, *Opinar* y *Comprobante*. Quien compra sin cuenta usa **Rastrear pedido** (número + correo). El personal captura paquetería y guía en el pedido y lo marca **En camino** (estado nuevo de WooCommerce).
+- **Boletín de correo:** formulario en el pie de todas las páginas y shortcode `[ah_boletin]`, con consentimiento explícito, doble confirmación por correo y enlace de baja en cada mensaje. La lista se administra en *Gestión TI → Boletín* (conteos por estado, reenviar confirmación, eliminar y exportar a CSV). **El envío de campañas no está incluido:** se exporta la lista de confirmados a un servicio de correo (Brevo, Mailchimp…), y los correos de confirmación necesitan SMTP.
 - **Contenido:** blog con 5 artículos SEO (imagen destacada, categoría, fecha, autor, compartir y productos relacionados), además de Nosotros, Historia de los artesanos, Contacto, FAQ, Mesa de ayuda, Servicios, Aviso de privacidad, Términos y Envíos y devoluciones.
 - **Gestión TI:** tablero con indicadores reales, mesa de ayuda, servicios, PDCA, SEM, monitoreo y ajustes.
 
@@ -151,13 +152,14 @@ Pasarelas con tarjeta **preparadas, sin credenciales**: Mercado Pago, Stripe o P
 
 - **Monitoreo:** *Gestión TI → Monitoreo* muestra disponibilidad, tiempo de respuesta (promedio y p95), errores HTTP, MTTR, errores de PHP y recursos del servidor, todo calculado **con muestras reales**. El endpoint `/wp-json/ah/v1/salud` sirve para monitores externos, y el workflow `monitoreo.yml` corre cada 30 minutos junto con una auditoría Lighthouse semanal.
 - **Mesa de ayuda:** página pública `/mesa-de-ayuda/` y panel *Gestión TI → Mesa de ayuda*. El flujo es Registro → Clasificación → Priorización → Asignación → Diagnóstico → Resolución → Cierre, con SLA por prioridad. Los clientes solo pueden ver sus propios tickets.
-- **Mejora continua:** reportes PDCA en *Gestión TI → Mejora continua* y plantilla en [docs/plantillas/reporte-mejora-continua.md](docs/plantillas/reporte-mejora-continua.md).
+- **Mejora continua:** reportes PDCA en *Gestión TI → Mejora continua*, plantilla en [docs/plantillas/reporte-mejora-continua.md](docs/plantillas/reporte-mejora-continua.md) y primer reporte con datos reales en [docs/mejora-continua/reporte-2026-11.md](docs/mejora-continua/reporte-2026-11.md).
+- **Caché:** WP Super Cache sirve las páginas públicas en unos 25 ms (antes, 1.6–1.9 s) y excluye carrito, pago, cuenta, Mis compras y usuarios con sesión ([módulo 3, §5.4](docs/modulo-3-devops.md)).
 
 ## 11. Pruebas
 
 ```bash
 composer install
-composer test            # PHPUnit (8 pruebas, 29 aserciones)
+composer test            # PHPUnit (12 pruebas, 42 aserciones)
 vendor/bin/phpcs         # WordPress Coding Standards + seguridad + compatibilidad PHP
 bash scripts/prueba-humo.sh http://localhost/artesanias-wp
 ```

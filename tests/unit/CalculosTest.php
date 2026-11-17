@@ -99,4 +99,18 @@ final class CalculosTest extends TestCase {
 		list( $min, $max ) = AH_Calculos::ventana_entrega( $domingo, 'express' );
 		$this->assertSame( array( '2026-11-09', '2026-11-11' ), array( $min->format( 'Y-m-d' ), $max->format( 'Y-m-d' ) ) );
 	}
+
+	public function test_correo_del_boletin() {
+		$this->assertTrue( AH_Calculos::correo_boletin_valido( 'cliente@example.com' ) );
+		$this->assertFalse( AH_Calculos::correo_boletin_valido( 'sin-arroba.com' ) );
+		$this->assertFalse( AH_Calculos::correo_boletin_valido( '' ) );
+		$this->assertFalse( AH_Calculos::correo_boletin_valido( str_repeat( 'a', 185 ) . '@x.com' ) );
+	}
+
+	public function test_csv_sin_formulas() {
+		$this->assertSame( "'=HYPERLINK(\"x\")", AH_Calculos::csv_seguro( '=HYPERLINK("x")' ) );
+		$this->assertSame( "'@SUM(A1)", AH_Calculos::csv_seguro( '@SUM(A1)' ) );
+		$this->assertSame( 'cliente@example.com', AH_Calculos::csv_seguro( 'cliente@example.com' ) );
+		$this->assertSame( '', AH_Calculos::csv_seguro( '' ) );
+	}
 }

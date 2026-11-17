@@ -5,14 +5,14 @@ set -u
 BASE="${1:?Indica la URL base del sitio}"
 FALLAS=0
 
-comprobar() { # ruta  código_esperado  texto_esperado(opcional)
+comprobar() { # ruta  código_esperado  texto_esperado(opcional; se busca en el HTML y en el texto sin etiquetas)
   local ruta="$1" esperado="$2" texto="${3:-}"
   local cuerpo codigo
   cuerpo=$(mktemp)
   codigo=$(curl -s -L -o "$cuerpo" -w "%{http_code}" --max-time 30 "$BASE$ruta")
   if [ "$codigo" != "$esperado" ]; then
     echo "FALLA  $ruta → HTTP $codigo (esperado $esperado)"; FALLAS=$((FALLAS+1))
-  elif [ -n "$texto" ] && ! grep -q "$texto" "$cuerpo"; then
+  elif [ -n "$texto" ] && ! grep -q "$texto" "$cuerpo" && ! sed "s/<[^>]*>//g" "$cuerpo" | grep -q "$texto"; then
     echo "FALLA  $ruta → no contiene «$texto»"; FALLAS=$((FALLAS+1))
   else
     echo "OK     $ruta ($codigo)"

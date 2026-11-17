@@ -27,6 +27,17 @@ $ah_nombres  = array(
 ?>
 <footer class="ah-pie">
 	<div class="ah-greca" aria-hidden="true"></div>
+	<?php if ( class_exists( 'AH_Boletin' ) ) : ?>
+		<section class="ah-boletin" aria-labelledby="ah-boletin-titulo">
+			<div class="ah-contenedor ah-boletin__interior">
+				<div class="ah-boletin__texto">
+					<h2 id="ah-boletin-titulo" class="ah-boletin__titulo"><?php esc_html_e( 'Recibe novedades de la Huasteca', 'artesanias-huejutla' ); ?></h2>
+					<p><?php esc_html_e( 'Nuevas piezas, historias de nuestros artesanos y promociones. Un correo de vez en cuando, sin spam.', 'artesanias-huejutla' ); ?></p>
+				</div>
+				<?php echo AH_Boletin::formulario( 'pie' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML escapado en el plugin. ?>
+			</div>
+		</section>
+	<?php endif; ?>
 	<div class="ah-pie__principal">
 		<div class="ah-contenedor ah-pie__rejilla">
 			<div class="ah-pie__marca">
