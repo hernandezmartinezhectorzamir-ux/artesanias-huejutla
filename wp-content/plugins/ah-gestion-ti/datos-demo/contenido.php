@@ -1,0 +1,81 @@
+<?php
+/**
+ * Contenido inicial de Artesanías Huejutla (lo usa `wp ah sembrar`).
+ *
+ * No incluye reseñas, testimonios, ventas ni métricas: esos datos deben
+ * generarse por uso real de la tienda.
+ *
+ * @package AH_Gestion_TI
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+return array(
+
+	/*
+	 * Imágenes: archivo => [título, texto alternativo, pie de foto].
+	 * Fotografías de Unsplash (licencia Unsplash) usadas como referencia visual.
+	 */
+	'imagenes'   => array(
+		'puesto-cesteria-palma-huejutla.jpg'    => array( 'Puesto de cestería de palma', 'Puesto tradicional con canastas, cestería de palma y textiles artesanales mexicanos', 'Cestería y textiles en un puesto tradicional.' ),
+		'bolsas-palma-bordadas-artesanales.jpg' => array( 'Bolsas de palma bordadas', 'Bolsas artesanales de palma con flores bordadas y asas de colores', 'Bolsas de palma con aplicaciones bordadas.' ),
+		'bordado-flores-hilo-algodon.jpg'       => array( 'Bordado de flores en hilo de algodón', 'Bordado artesanal de rosas en hilos de colores sobre manta', 'Bordado a mano en hilo de algodón.' ),
+		'artesana-bordando-a-mano.jpg'          => array( 'Artesana bordando a mano', 'Manos de artesana bordando una tela con hilos de colores', 'El bordado se realiza puntada a puntada.' ),
+		'artesana-tejiendo-en-telar.jpg'        => array( 'Artesana tejiendo en telar', 'Artesana tejiendo en un telar tradicional de cintura', 'El tejido en telar es un saber que se hereda.' ),
+		'artesana-blusa-bordada-huasteca.jpg'   => array( 'Artesana con blusa bordada', 'Artesana con blusa bordada tradicional junto a prendas bordadas', 'Los bordados guardan símbolos de la naturaleza.' ),
+		'canastas-palma-collares-semillas.jpg'  => array( 'Canastas de palma y collares de semillas', 'Canastas tejidas de palma natural con collares de semillas de colores', 'Palma y semillas: materiales naturales de la región.' ),
+		'esferas-palma-tenida-colores.jpg'      => array( 'Esferas de palma teñida', 'Esferas tejidas con palma teñida en colores rosa, amarillo, verde y morado', 'Palma teñida y tejida a mano.' ),
+	),
+
+	'categorias' => array(
+		'cesteria-de-palma'      => array( 'Cestería de palma', 'Cestas, tortilleros y piezas tejidas con palma natural por artesanos de Huejutla, Hidalgo.', 'esferas-palma-tenida-colores.jpg' ),
+		'textiles-bordados'      => array( 'Textiles bordados', 'Rebozos, manteles, servilletas y blusas bordadas a mano con motivos de la Huasteca Hidalguense.', 'bordado-flores-hilo-algodon.jpg' ),
+		'canastas-artesanales'   => array( 'Canastas artesanales', 'Canastas de palma tejida resistentes y hechas a mano, ideales para el mercado o el hogar.', 'puesto-cesteria-palma-huejutla.jpg' ),
+		'decoracion-tradicional' => array( 'Decoración tradicional', 'Piezas decorativas de palma y fibras naturales que llevan el color de la Huasteca a tu hogar.', 'canastas-palma-collares-semillas.jpg' ),
+		'accesorios-artesanales' => array( 'Accesorios artesanales', 'Bolsas de palma, sombreros y collares de semillas elaborados a mano en Huejutla.', 'bolsas-palma-bordadas-artesanales.jpg' ),
+		'regalos-mexicanos'      => array( 'Regalos mexicanos', 'Regalos con historia: cajas y detalles artesanales hechos a mano en la Huasteca Hidalguense.', 'artesana-blusa-bordada-huasteca.jpg' ),
+	),
+
+	/*
+	 * Productos: los seis primeros son los solicitados en la especificación.
+	 * [sku, nombre, slug, categoría, precio, precio oferta|null, existencias,
+	 *  destacado, imágenes, descripción corta, descripción larga, materiales, origen, medidas, palabra clave]
+	 */
+	'productos'  => array(
+		array( 'AH-001', 'Tazón Huasteco Decorado', 'tazon-huasteco-decorado', 'decoracion-tradicional', 180, 150, 14, true, array( 'canastas-palma-collares-semillas.jpg', 'esferas-palma-tenida-colores.jpg' ), 'Tazón tejido en palma natural con aplicaciones de color, ideal como frutero o pieza decorativa.', 'Este tazón decorativo se teje a mano con palma natural seleccionada y secada al sol. Los detalles de color se elaboran con fibras teñidas, siguiendo motivos inspirados en la flora de la Huasteca. Funciona como frutero, centro de mesa o pieza decorativa para dar calidez a cualquier espacio.', 'Palma natural y fibras teñidas', 'Huejutla de Reyes, Hidalgo', '24 cm de diámetro × 10 cm de alto', 'tazón de palma decorado' ),
+		array( 'AH-002', 'Rebozo Tenango Bordado', 'rebozo-tenango-bordado', 'textiles-bordados', 850, null, 5, true, array( 'bordado-flores-hilo-algodon.jpg', 'artesana-bordando-a-mano.jpg', 'artesana-blusa-bordada-huasteca.jpg' ), 'Rebozo de algodón con bordado de flores y aves en hilos de colores vivos, hecho a mano.', 'Rebozo de algodón suave bordado completamente a mano con estilo tenango: flores, aves y hojas en hilos de colores intensos. Cada rebozo requiere varias semanas de trabajo, por lo que ninguno es idéntico a otro. Una prenda para lucir en ocasiones especiales o para regalar tradición.', 'Manta de algodón e hilo de algodón mercerizado', 'Huejutla de Reyes, Hidalgo', '180 cm × 70 cm', 'rebozo bordado a mano' ),
+		array( 'AH-003', 'Cesta de Palma con Tapa', 'cesta-de-palma-con-tapa', 'cesteria-de-palma', 120, null, 22, true, array( 'esferas-palma-tenida-colores.jpg', 'canastas-palma-collares-semillas.jpg' ), 'Cesta ligera de palma con tapa y franjas de color, perfecta para guardar y organizar.', 'Cesta pequeña con tapa, tejida en palma natural y franjas de colores. Su tejido cerrado la hace resistente y práctica para guardar hilos, joyería, semillas o pequeños objetos. Una pieza útil que conserva la técnica tradicional de cestería de la región.', 'Palma natural teñida', 'Huejutla de Reyes, Hidalgo', '14 cm de diámetro × 12 cm de alto', 'cesta de palma con tapa' ),
+		array( 'AH-004', 'Canasta de Palma Tejida', 'canasta-de-palma-tejida', 'canastas-artesanales', 290, 250, 9, true, array( 'puesto-cesteria-palma-huejutla.jpg', 'canastas-palma-collares-semillas.jpg', 'artesana-tejiendo-en-telar.jpg' ), 'Canasta de palma tejida a mano, resistente y de tejido cerrado, con asas reforzadas.', 'Esta canasta de palma tejida a mano combina belleza, resistencia y tradición. Cada fibra se selecciona, se seca y se entrelaza con paciencia por artesanos de Huejutla. Sus asas reforzadas permiten usarla para el mercado, como canasta de picnic o para organizar el hogar.', 'Palma natural y asas de palma trenzada', 'Huejutla de Reyes, Hidalgo', '32 cm de diámetro × 26 cm de alto', 'canasta de palma tejida' ),
+		array( 'AH-005', 'Bolsa Artesanal de Palma', 'bolsa-artesanal-de-palma', 'accesorios-artesanales', 320, null, 11, true, array( 'bolsas-palma-bordadas-artesanales.jpg', 'canastas-palma-collares-semillas.jpg' ), 'Bolsa de palma natural con flores bordadas y asas de colores, ligera y amplia.', 'Bolsa tejida en palma natural con aplicaciones de flores bordadas y asas forradas a mano. Combina el oficio tradicional con un diseño actual, ideal para el día a día o para la playa. Ligera, amplia y única.', 'Palma natural, hilo de algodón y listón', 'Huejutla de Reyes, Hidalgo', '38 cm × 28 cm × 12 cm', 'bolsa de palma artesanal' ),
+		array( 'AH-006', 'Mantel Bordado a Mano', 'mantel-bordado-a-mano', 'textiles-bordados', 520, 450, 7, true, array( 'artesana-bordando-a-mano.jpg', 'bordado-flores-hilo-algodon.jpg' ), 'Mantel de manta de algodón con motivos florales bordados a mano, inspirados en la Huasteca.', 'Mantel de manta de algodón bordado a mano con motivos florales y grecas tradicionales de la Huasteca. Su bordado en punto de cruz y relleno lo convierte en una pieza duradera que viste la mesa en reuniones familiares y celebraciones.', 'Manta de algodón e hilo de algodón', 'Huejutla de Reyes, Hidalgo', '150 cm × 150 cm', 'mantel bordado a mano' ),
+		array( 'AH-007', 'Sombrero de Palma Huasteco', 'sombrero-de-palma-huasteco', 'accesorios-artesanales', 280, null, 3, false, array( 'artesana-tejiendo-en-telar.jpg', 'puesto-cesteria-palma-huejutla.jpg' ), 'Sombrero fresco de palma trenzada con cinta tejida de colores.', 'Sombrero elaborado con trenza de palma cosida en espiral y rematado con una cinta tejida de colores. Fresco, ligero y resistente, es el acompañante ideal para el clima cálido de la Huasteca.', 'Palma trenzada y cinta de algodón', 'Huejutla de Reyes, Hidalgo', 'Talla única ajustable (57–59 cm)', 'sombrero de palma' ),
+		array( 'AH-008', 'Collar de Semillas Naturales', 'collar-de-semillas-naturales', 'accesorios-artesanales', 180, null, 16, false, array( 'canastas-palma-collares-semillas.jpg' ), 'Collar ensartado a mano con semillas de la región y cuentas de colores.', 'Collar ensartado a mano con semillas naturales recolectadas en la región, combinadas con cuentas de colores. Cada pieza conserva las variaciones propias de los materiales naturales.', 'Semillas naturales, cuentas e hilo encerado', 'Huejutla de Reyes, Hidalgo', '60 cm de largo', 'collar de semillas' ),
+		array( 'AH-009', 'Servilletas Bordadas (juego de 4)', 'servilletas-bordadas-juego-de-4', 'textiles-bordados', 380, null, 12, false, array( 'bordado-flores-hilo-algodon.jpg', 'artesana-bordando-a-mano.jpg' ), 'Juego de cuatro servilletas de manta con flores bordadas a mano.', 'Juego de cuatro servilletas de manta de algodón con flores bordadas a mano en colores vivos. Ideales para tortilleros y canastas, o como detalle para la mesa en días de fiesta.', 'Manta de algodón e hilo de algodón', 'Huejutla de Reyes, Hidalgo', '45 cm × 45 cm cada una', 'servilletas bordadas' ),
+		array( 'AH-010', 'Esferas de Palma Multicolor (6 piezas)', 'esferas-de-palma-multicolor', 'decoracion-tradicional', 160, null, 25, false, array( 'esferas-palma-tenida-colores.jpg' ), 'Set de seis esferas tejidas en palma teñida para decorar.', 'Set de seis esferas tejidas con tiras de palma teñidas en tonos vivos. Lucen en centros de mesa, guirnaldas o como adorno de temporada. Ligeras y hechas una por una.', 'Palma natural teñida', 'Huejutla de Reyes, Hidalgo', '7 cm de diámetro cada una', 'esferas de palma' ),
+		array( 'AH-011', 'Tortillero de Palma Tejida', 'tortillero-de-palma-tejida', 'cesteria-de-palma', 140, null, 18, false, array( 'canastas-palma-collares-semillas.jpg', 'puesto-cesteria-palma-huejutla.jpg' ), 'Tortillero tradicional de palma que conserva el calor de las tortillas.', 'Tortillero tejido en palma natural con tapa, una pieza esencial en la cocina huasteca. Conserva el calor y la humedad de las tortillas, y su tejido cerrado lo hace muy duradero.', 'Palma natural', 'Huejutla de Reyes, Hidalgo', '20 cm de diámetro × 9 cm de alto', 'tortillero de palma' ),
+		array( 'AH-012', 'Caja de Regalo Huasteca', 'caja-de-regalo-huasteca', 'regalos-mexicanos', 780, 690, 6, false, array( 'bolsas-palma-bordadas-artesanales.jpg', 'bordado-flores-hilo-algodon.jpg' ), 'Bolsa de palma, servilleta bordada y collar de semillas en una caja tejida.', 'Una selección pensada para regalar: bolsa de palma, servilleta bordada y collar de semillas, presentados en una caja tejida con una tarjeta que cuenta la historia de las piezas y sus artesanos.', 'Palma, algodón y semillas naturales', 'Huejutla de Reyes, Hidalgo', 'Caja de 35 cm × 25 cm × 15 cm', 'regalos artesanales mexicanos' ),
+		array( 'AH-013', 'Blusa Bordada Huasteca', 'blusa-bordada-huasteca', 'textiles-bordados', 620, null, 4, false, array( 'artesana-blusa-bordada-huasteca.jpg', 'bordado-flores-hilo-algodon.jpg' ), 'Blusa de manta con bordado en punto de cruz en cuello y mangas.', 'Blusa de manta de algodón con bordado de punto de cruz en cuello y mangas, con motivos de aves y flores. Una prenda fresca que lleva consigo la identidad textil de la Huasteca.', 'Manta de algodón e hilo de algodón', 'Huejutla de Reyes, Hidalgo', 'Unitalla holgada (CH a G)', 'blusa bordada huasteca' ),
+		array( 'AH-014', 'Petate de Palma Decorado', 'petate-de-palma-decorado', 'decoracion-tradicional', 350, null, 0, false, array( 'puesto-cesteria-palma-huejutla.jpg', 'esferas-palma-tenida-colores.jpg' ), 'Petate tejido con franjas de colores, para muro o como tapete.', 'Petate tejido a mano en palma con franjas de colores. Puede usarse como tapete, mantel de piso o pieza decorativa en muro. Se envía enrollado y atado con fibra natural.', 'Palma natural y palma teñida', 'Huejutla de Reyes, Hidalgo', '120 cm × 80 cm', 'petate de palma' ),
+		array( 'AH-015', 'Monedero de Palma Bordado', 'monedero-de-palma-bordado', 'regalos-mexicanos', 95, null, 30, false, array( 'bolsas-palma-bordadas-artesanales.jpg' ), 'Pequeño monedero de palma con flor bordada y cierre.', 'Monedero tejido en palma con una flor bordada al frente y cierre de tela. Un detalle práctico y económico, perfecto como recuerdo o regalo de la Huasteca.', 'Palma natural, algodón y cierre metálico', 'Huejutla de Reyes, Hidalgo', '13 cm × 9 cm', 'monedero de palma' ),
+	),
+
+	'cupones'    => array(
+		array( 'HUASTECA10', 'percent', 10, 0, false, '10 % de descuento en tu pedido.' ),
+		array( 'ENVIOGRATIS', 'fixed_cart', 0, 0, true, 'Envío estándar gratis.' ),
+		array( 'ARTESANO50', 'fixed_cart', 50, 500, false, '$50 de descuento en compras desde $500.' ),
+	),
+
+	/*
+	 * Servicios ITIL: [título, slug, descripción, beneficios, disponibilidad, canal, enlace, ícono].
+	 */
+	'servicios'  => array(
+		array( 'Compra de productos artesanales', 'compra-de-productos-artesanales', 'Venta en línea de artesanías auténticas de Huejutla con información de origen, materiales y existencias en tiempo real.', "Piezas 100 % hechas a mano\nPrecios justos para las familias artesanas\nPago fuera de línea o con pasarela segura", 'Tienda en línea 24/7', 'Tienda en línea', '/tienda/', 'bolsa' ),
+		array( 'Atención al cliente', 'atencion-al-cliente', 'Resolvemos dudas sobre productos, cuidados, tiempos de entrega y compras al mayoreo.', "Respuesta personalizada\nSeguimiento con número de ticket\nAtención por varios canales", 'Lunes a sábado; respuesta inicial en menos de 24 h hábiles', 'Mesa de ayuda, contacto y WhatsApp', '/mesa-de-ayuda/', 'chat' ),
+		array( 'Seguimiento de pedidos', 'seguimiento-de-pedidos', 'Consulta del estado de tu pedido: pagado, en preparación, enviado o entregado, desde tu cuenta.', "Historial de pedidos en Mi cuenta\nNotificaciones por correo en cada cambio\nAyuda si hay retrasos", 'Disponible 24/7 en Mi cuenta', 'Mi cuenta → Pedidos', '/mi-cuenta/', 'paquete' ),
+		array( 'Asistencia con compras', 'asistencia-con-compras', 'Te ayudamos a elegir la pieza ideal, armar regalos y completar tu compra si tienes problemas en el proceso de pago.', "Recomendaciones según uso y presupuesto\nApoyo paso a paso en el pago\nOpciones para regalos corporativos", 'Lunes a sábado, en horario de atención', 'Mesa de ayuda (categoría: Problemas con compras)', '/mesa-de-ayuda/', 'ayuda' ),
+		array( 'Información de envíos', 'informacion-de-envios', 'Detalles de cobertura, costos, tiempos de entrega y empaque de los envíos a todo México.', "Envío estándar gratis desde $999\nEmpaque protector para piezas frágiles\nOpción de recoger en taller", 'Consulta inmediata en la política de envíos', 'Página de envíos y devoluciones', '/envios-y-devoluciones/', 'camion' ),
+		array( 'Solicitudes de devolución', 'solicitudes-de-devolucion', 'Gestión de cambios y devoluciones cuando una pieza llega dañada o no corresponde a tu pedido.', "15 días naturales para solicitarla\nRevisión con evidencia fotográfica\nReposición o reembolso según el caso", '15 días naturales posteriores a la entrega', 'Mesa de ayuda (categoría: Problemas con pedidos)', '/mesa-de-ayuda/', 'devolucion' ),
+		array( 'Soporte técnico', 'soporte-tecnico', 'Ayuda con problemas de acceso a tu cuenta, errores en el sitio o fallas durante el proceso de compra.', "Diagnóstico y solución documentada\nPrioridad según impacto (matriz ITIL)\nMejora continua del sitio", 'Incidentes críticos: objetivo de solución en 4 h', 'Mesa de ayuda (categoría: Problemas técnicos o de acceso)', '/mesa-de-ayuda/', 'soporte' ),
+		array( 'Atención a artesanos y proveedores', 'atencion-a-artesanos-y-proveedores', 'Canal para familias artesanas que desean ofrecer sus piezas y para proveedores de materiales y empaques.', "Registro de nuevas familias artesanas\nAcuerdos de precio justo\nAcompañamiento en la publicación de productos", 'Lunes a viernes, previa cita', 'Contacto o videollamada', '/contacto/', 'manos' ),
+	),
+);

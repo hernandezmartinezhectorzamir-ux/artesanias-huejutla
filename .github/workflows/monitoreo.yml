@@ -1,0 +1,49 @@
+# =========================================================
+# Monitoreo externo – disponibilidad y rendimiento
+# - Cada 30 minutos: endpoint de salud + páginas clave (código y tiempo).
+# - Semanal: auditoría Lighthouse (rendimiento, accesibilidad, SEO).
+# Solo se ejecuta si existe la variable SITE_URL (sitio público).
+# Los resultados quedan como artefactos y en el resumen del job.
+# =========================================================
+name: Monitoreo
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+    - cron: '0 13 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  disponibilidad:
+    runs-on: ubuntu-latest
+    if: vars.SITE_URL != ''
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar disponibilidad
+        run: |
+          echo "| URL | HTTP | Tiempo total (s) | TTFB (s) |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|---|---|" >> $GITHUB_STEP_SUMMARY
+          FALLAS=0
+          for ruta in /wp-json/ah/v1/salud / /tienda/ /mesa-de-ayuda/; do
+            R=$(curl -s -o /dev/null -w "%{http_code} %{time_total} %{time_starttransfer}" --max-time 30 "${{ vars.SITE_URL }}$ruta" || echo "000 30 30")
+            set -- $R
+            echo "| $ruta | $1 | $2 | $3 |" >> $GITHUB_STEP_SUMMARY
+            [ "$1" -ge 200 ] && [ "$1" -lt 400 ] || FALLAS=$((FALLAS+1))
+          done
+          if [ "$FALLAS" -gt 0 ]; then echo "::error::$FALLAS verificaciones fallaron"; exit 1; fi
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    if: vars.SITE_URL != '' && (github.event.schedule == '0 13 * * 1' || github.event_name == 'workflow_dispatch')
+    steps:
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            ${{ vars.SITE_URL }}/
+            ${{ vars.SITE_URL }}/tienda/
+            ${{ vars.SITE_URL }}/producto/canasta-de-palma-tejida/
+          uploadArtifacts: true
+          temporaryPublicStorage: false

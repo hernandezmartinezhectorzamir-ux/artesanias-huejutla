@@ -1,0 +1,56 @@
+# =========================================================
+# Artesanías Huejutla – solo se versiona el código propio:
+# tema, plugin, pruebas, CI/CD y documentación.
+# =========================================================
+
+# --- Núcleo de WordPress (se instala, no se versiona) ---
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/index.php
+/xmlrpc.php
+/license.txt
+/readme.html
+
+# --- Configuración y secretos (NUNCA subir) ---
+wp-config.php
+wp-config-*.php
+!wp-config-produccion.example.php
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+auth.json
+credenciales*
+*.sql
+*.sql.gz
+
+# --- Contenido generado o de terceros ---
+/wp-content/*
+!/wp-content/themes/
+/wp-content/themes/*
+!/wp-content/themes/artesanias-huejutla/
+!/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/ah-gestion-ti/
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/cache/
+/wp-content/debug.log
+*.log
+
+# --- Dependencias y reportes ---
+/vendor/
+/node_modules/
+/reportes/
+.phpunit.cache/
+.phpunit.result.cache
+
+# --- Sistema y editores ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,112 @@
+# =========================================================
+# Despliegue continuo – Artesanías Huejutla
+#
+# develop → entorno "pruebas" (staging) automáticamente tras un CI exitoso.
+# main    → entorno "produccion" SOLO con aprobación manual
+#           (regla de revisores obligatorios del Environment en GitHub).
+#
+# Seguridad:
+#  - No se ejecuta si faltan los secretos (no falla ni despliega a ciegas).
+#  - Respaldo de base de datos y de archivos ANTES de cada despliegue.
+#  - Solo se sincronizan el tema y el plugin propios (rsync acotado);
+#    nunca se tocan wp-config.php, uploads ni el núcleo de WordPress.
+#  - Verificación posterior con la prueba de humo y el endpoint de salud.
+# =========================================================
+name: Despliegue
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [develop, main]
+  workflow_dispatch:
+    inputs:
+      entorno:
+        description: 'Entorno destino'
+        required: true
+        type: choice
+        options: [pruebas, produccion]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: despliegue-${{ github.event.workflow_run.head_branch || inputs.entorno }}
+  cancel-in-progress: false
+
+jobs:
+  desplegar:
+    if: >
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'workflow_dispatch' && inputs.entorno || (github.event.workflow_run.head_branch == 'main' && 'produccion' || 'pruebas') }}
+      url: ${{ vars.SITE_URL }}
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+      WP_PATH: ${{ secrets.WP_PATH }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Verificar configuración del entorno
+        id: config
+        run: |
+          if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$WP_PATH" ] || [ -z "$SITE_URL" ]; then
+            echo "::warning::Faltan secretos/variables del entorno (SSH_HOST, SSH_USER, SSH_KEY, WP_PATH, SITE_URL). No se despliega."
+            echo "listo=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "listo=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configurar SSH
+        if: steps.config.outputs.listo == 'true'
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_despliegue && chmod 600 ~/.ssh/id_despliegue
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Respaldo previo (base de datos + código actual)
+        if: steps.config.outputs.listo == 'true'
+        run: |
+          FECHA=$(date +%Y%m%d-%H%M%S)
+          ssh -i ~/.ssh/id_despliegue -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s <<EOF
+            set -e
+            mkdir -p ~/respaldos
+            cd "$WP_PATH"
+            wp db export ~/respaldos/bd-$FECHA.sql --quiet
+            gzip ~/respaldos/bd-$FECHA.sql
+            tar -czf ~/respaldos/codigo-$FECHA.tar.gz wp-content/themes/artesanias-huejutla wp-content/plugins/ah-gestion-ti 2>/dev/null || true
+            ls -1t ~/respaldos/bd-*.sql.gz | tail -n +15 | xargs -r rm --
+          EOF
+
+      - name: Activar modo mantenimiento
+        if: steps.config.outputs.listo == 'true'
+        run: ssh -i ~/.ssh/id_despliegue -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" "cd '$WP_PATH' && wp maintenance-mode activate || true"
+
+      - name: Sincronizar tema y plugin (rsync acotado)
+        if: steps.config.outputs.listo == 'true'
+        run: |
+          RSYNC="rsync -az --delete --exclude=.DS_Store -e 'ssh -i ~/.ssh/id_despliegue -p $SSH_PORT'"
+          eval $RSYNC wp-content/themes/artesanias-huejutla/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/themes/artesanias-huejutla/"
+          eval $RSYNC wp-content/plugins/ah-gestion-ti/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/plugins/ah-gestion-ti/"
+
+      - name: Tareas posteriores y salir de mantenimiento
+        if: always() && steps.config.outputs.listo == 'true'
+        run: |
+          ssh -i ~/.ssh/id_despliegue -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" bash -s <<EOF
+            cd "$WP_PATH"
+            wp plugin activate ah-gestion-ti --quiet
+            wp cache flush --quiet || true
+            wp rewrite flush --quiet
+            wp maintenance-mode deactivate || true
+          EOF
+
+      - name: Verificación posterior (prueba de humo)
+        if: steps.config.outputs.listo == 'true'
+        run: bash scripts/prueba-humo.sh "$SITE_URL"

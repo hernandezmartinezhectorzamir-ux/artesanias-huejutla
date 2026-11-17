@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<ruleset name="Artesanias Huejutla">
+	<description>Estándares de código de WordPress para el tema y el plugin.</description>
+
+	<file>wp-content/themes/artesanias-huejutla</file>
+	<file>wp-content/plugins/ah-gestion-ti</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/assets/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg value="sp"/>
+	<arg name="colors"/>
+	<arg name="report-full"/>
+	<arg name="report-checkstyle" value="reportes/phpcs-checkstyle.xml"/>
+
+	<config name="testVersion" value="8.0-"/>
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<!-- Seguridad: escape, sanitización, nonces y consultas preparadas. -->
+	<rule ref="WordPress-Extra">
+		<!-- Nombres de archivo en español con prefijo class-ah-*. -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<!-- Se permiten arreglos cortos por legibilidad en plantillas. -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+		<!-- Las tablas propias se consultan directamente con $wpdb->prepare(). -->
+		<exclude name="WordPress.DB.DirectDatabaseQuery.DirectQuery"/>
+		<exclude name="WordPress.DB.DirectDatabaseQuery.NoCaching"/>
+	</rule>
+	<rule ref="WordPress.Security"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<!-- Permisos registrados por WooCommerce y por el plugin. -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="edit_shop_orders"/>
+				<element value="ah_gestionar_tickets"/>
+				<element value="ah_gestion_ti"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="artesanias-huejutla"/>
+				<element value="ah-gestion-ti"/>
+			</property>
+		</properties>
+	</rule>
+	<!-- Plantillas obligatorias de la jerarquía de WordPress para el tipo ah_servicio. -->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>*/archive-ah_servicio.php</exclude-pattern>
+		<exclude-pattern>*/single-ah_servicio.php</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="ah"/>
+				<element value="AH"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

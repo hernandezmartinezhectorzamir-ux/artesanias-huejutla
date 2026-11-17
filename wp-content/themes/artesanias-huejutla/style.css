@@ -1,0 +1,18 @@
+/*
+Theme Name:        Artesanías Huejutla
+Theme URI:         https://github.com/
+Author:            Equipo ISC – Instituto Tecnológico de Huejutla
+Description:       Tema personalizado para la tienda Artesanías Huejutla: identidad artesanal de la Huasteca Hidalguense, integración completa con WooCommerce, SEO semántico, accesibilidad y diseño responsive. Funciona junto con el plugin "Artesanías Huejutla – Gestión TI".
+Version:           1.0.0
+Requires at least: 6.4
+Tested up to:      7.1
+Requires PHP:      8.0
+License:           GNU General Public License v2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:       artesanias-huejutla
+Tags:              e-commerce, custom-menu, custom-logo, featured-images, translation-ready, accessibility-ready
+WC requires at least: 8.0
+WC tested up to:   11.2
+*/
+
+/* Los estilos se cargan desde assets/css/ (ver inc/recursos.php). */

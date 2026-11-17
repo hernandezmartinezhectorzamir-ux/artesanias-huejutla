@@ -1,0 +1,185 @@
+# =========================================================
+# Integración continua – Artesanías Huejutla
+# Se ejecuta en cada push y pull request a main/develop/feature/*.
+# Etapas: sintaxis PHP → validación de archivos → estándares
+#         de código (WPCS) → pruebas unitarias → humo en WordPress
+#         real → artefacto listo para desplegar.
+# =========================================================
+name: CI
+
+on:
+  push:
+    branches: [main, develop, 'feature/**', 'hotfix/**']
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sintaxis:
+    name: 1 · Sintaxis PHP (${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: php -l en tema y plugin
+        run: |
+          set -e
+          find wp-content/themes/artesanias-huejutla wp-content/plugins/ah-gestion-ti tests -name '*.php' -print0 \
+            | xargs -0 -n1 php -l | tee sintaxis.txt
+          ! grep -v "No syntax errors" sintaxis.txt
+
+  archivos:
+    name: 2 · Validación básica de archivos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Estructura obligatoria
+        run: |
+          for f in wp-content/themes/artesanias-huejutla/style.css \
+                   wp-content/themes/artesanias-huejutla/functions.php \
+                   wp-content/plugins/ah-gestion-ti/ah-gestion-ti.php \
+                   README.md docs/modulo-1-marketing-seo-sem.md docs/modulo-3-devops.md docs/modulo-4-itil.md; do
+            test -f "$f" || { echo "::error file=$f::Falta el archivo obligatorio $f"; exit 1; }
+          done
+      - name: Cabeceras de tema y plugin
+        run: |
+          grep -q "Theme Name:" wp-content/themes/artesanias-huejutla/style.css
+          grep -q "Plugin Name:" wp-content/plugins/ah-gestion-ti/ah-gestion-ti.php
+      - name: Sin secretos ni archivos sensibles
+        run: |
+          if git ls-files | grep -E '(^|/)(wp-config\.php|\.env|.*\.sql(\.gz)?|.*\.pem|.*\.key)$'; then
+            echo "::error::Se versionó un archivo sensible"; exit 1; fi
+          if grep -RInE "(define\(\s*'DB_PASSWORD'\s*,\s*'[^']+')|(AKIA[0-9A-Z]{16})|(sk_live_[0-9a-zA-Z]{20,})" --include='*.php' --include='*.js' wp-content; then
+            echo "::error::Posible credencial en el código"; exit 1; fi
+      - name: JSON y YAML válidos
+        run: |
+          python3 -c "import json,sys; json.load(open('composer.json'))"
+          python3 -c "import yaml,glob; [yaml.safe_load(open(f)) for f in glob.glob('.github/workflows/*.yml')]"
+      - name: Sintaxis de JavaScript
+        run: |
+          for f in $(find wp-content -name '*.js' -not -path '*/vendor/*'); do node --check "$f"; done
+
+  estandares:
+    name: 3 · Estándares de código (WordPress Coding Standards)
+    runs-on: ubuntu-latest
+    needs: sintaxis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --no-progress
+      - name: PHPCS (WordPress-Extra + Security + PHPCompatibility)
+        run: |
+          mkdir -p reportes
+          vendor/bin/phpcs --report-summary --report-checkstyle=reportes/phpcs-checkstyle.xml || echo "PHPCS_FALLO=1" >> $GITHUB_ENV
+      - name: Errores de seguridad bloquean el pipeline
+        run: |
+          vendor/bin/phpcs --sniffs=WordPress.Security.EscapeOutput,WordPress.Security.NonceVerification,WordPress.Security.ValidatedSanitizedInput,WordPress.DB.PreparedSQL --severity=5 --warning-severity=0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-phpcs
+          path: reportes/
+
+  pruebas:
+    name: 4 · Pruebas unitarias (PHPUnit)
+    runs-on: ubuntu-latest
+    needs: sintaxis
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --no-progress
+      - run: mkdir -p reportes && vendor/bin/phpunit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-phpunit
+          path: reportes/
+
+  humo:
+    name: 5 · Prueba de humo en WordPress + WooCommerce reales
+    runs-on: ubuntu-latest
+    needs: [pruebas, archivos]
+    services:
+      mysql:
+        image: mariadb:10.11
+        env:
+          MARIADB_ROOT_PASSWORD: ci
+          MARIADB_DATABASE: wp_ci
+        ports: ['3306:3306']
+        options: --health-cmd="healthcheck.sh --connect" --health-interval=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, gd, intl, zip
+          tools: wp-cli
+      - name: Instalar WordPress, WooCommerce y Rank Math
+        run: |
+          mkdir sitio && cd sitio
+          wp core download --locale=es_MX
+          wp config create --dbname=wp_ci --dbuser=root --dbpass=ci --dbhost=127.0.0.1
+          wp core install --url=http://127.0.0.1:8080 --title="Artesanías Huejutla" --admin_user=ci --admin_password="$(openssl rand -hex 12)" --admin_email=ci@example.com --skip-email
+          wp plugin install woocommerce seo-by-rank-math --activate
+          cp -r ../wp-content/themes/artesanias-huejutla wp-content/themes/
+          cp -r ../wp-content/plugins/ah-gestion-ti wp-content/plugins/
+          wp theme activate artesanias-huejutla
+          wp plugin activate ah-gestion-ti
+          wp ah sembrar
+          wp rewrite structure '/%postname%/'
+      - name: Servidor y verificación de URLs
+        run: |
+          cd sitio
+          php -S 127.0.0.1:8080 -t . ../scripts/router.php > ../servidor.log 2>&1 &
+          sleep 3
+          mkdir -p ../reportes
+          bash ../scripts/prueba-humo.sh http://127.0.0.1:8080 | tee ../reportes/prueba-humo.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-humo
+          path: |
+            reportes/
+            servidor.log
+
+  paquete:
+    name: 6 · Preparar despliegue (artefacto)
+    runs-on: ubuntu-latest
+    needs: [estandares, humo]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    steps:
+      - uses: actions/checkout@v4
+      - name: Empaquetar tema y plugin
+        run: |
+          mkdir -p dist
+          VERSION="$(date +%Y%m%d)-${GITHUB_SHA::7}"
+          echo "$VERSION" > dist/VERSION
+          (cd wp-content/themes && zip -qr "../../dist/artesanias-huejutla-tema-$VERSION.zip" artesanias-huejutla)
+          (cd wp-content/plugins && zip -qr "../../dist/ah-gestion-ti-$VERSION.zip" ah-gestion-ti)
+          ls -la dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paquete-despliegue
+          path: dist/
+          retention-days: 30

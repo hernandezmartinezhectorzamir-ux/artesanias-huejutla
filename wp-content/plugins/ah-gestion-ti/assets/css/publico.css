@@ -1,0 +1,73 @@
+/* Estilos base de la mesa de ayuda, contacto, servicios y favoritos.
+   Usan variables del tema con valores de respaldo para funcionar con cualquier tema. */
+.ah-mesa { --ah-c: var(--terracota, #b5532f); --ah-o: var(--olivo, #6b7442); --ah-b: var(--borde, #e3d7c4); --ah-t: var(--gris, #2e2a27); --ah-s: var(--gris-suave, #6e655d); }
+.ah-mesa__rejilla { display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; align-items: start; }
+.ah-mesa__lateral { display: grid; gap: 1.5rem; }
+.ah-tarjeta { background: #fff; border: 1px solid var(--ah-b); border-radius: 20px; padding: clamp(1.2rem, 3vw, 2rem); }
+.ah-tarjeta h2 { margin: 0 0 .4rem; font-size: 1.45rem; }
+.ah-texto-suave { color: var(--ah-s); }
+.ah-texto-pequeno { font-size: .85rem; }
+.ah-form { display: grid; gap: 1rem; margin-top: 1rem; }
+.ah-form__fila { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.ah-campo { display: flex; flex-direction: column; gap: .35rem; }
+.ah-campo label { font-weight: 700; font-size: .9rem; }
+.ah-campo input, .ah-campo select, .ah-campo textarea { width: 100%; min-height: 48px; padding: .7rem .9rem; border: 1.5px solid var(--ah-b); border-radius: 10px; background: #fff; font: inherit; }
+.ah-campo input:focus, .ah-campo select:focus, .ah-campo textarea:focus { outline: none; border-color: var(--ah-o); box-shadow: 0 0 0 4px rgba(107, 116, 66, .15); }
+.ah-campo--error input, .ah-campo--error select, .ah-campo--error textarea { border-color: #b3261e; background: #fff8f7; }
+.ah-error { color: #b3261e; font-size: .85rem; font-weight: 600; margin: 0; }
+.ah-req { color: var(--ah-c); }
+.ah-oculto { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.ah-boton { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; padding: .7rem 1.4rem; border: 0; border-radius: 999px; background: var(--ah-c); color: #fff !important; font-weight: 700; text-decoration: none; cursor: pointer; transition: background .2s, transform .2s; }
+.ah-boton:hover { background: var(--terracota-oscuro, #94401f); transform: translateY(-1px); }
+.ah-boton--secundario { background: var(--ah-o); }
+.ah-boton--secundario:hover { background: var(--olivo-oscuro, #545b33); }
+.ah-boton--texto { background: none; color: var(--ah-c) !important; padding-inline: .3rem; }
+.ah-boton--texto:hover { background: none; text-decoration: underline; }
+.ah-boton--whatsapp { background: #1f8f4e; }
+.ah-boton--whatsapp:hover { background: #17713d; }
+.ah-aviso { padding: 1rem 1.2rem; border-radius: 12px; margin-bottom: 1.2rem; }
+.ah-aviso--exito { background: #edf3e4; border: 1px solid #c9d8b3; color: #3c5a24; }
+.ah-aviso--error { background: #fbeceb; border: 1px solid #f1c7c3; color: #b3261e; }
+.ah-numero { font-family: var(--f-titulo, Georgia, serif); font-size: 1.25em; font-weight: 700; letter-spacing: .03em; background: #fff; padding: .1rem .5rem; border-radius: 6px; border: 1px dashed currentColor; white-space: nowrap; }
+.ah-ticket { margin-bottom: 1.5rem; border-color: var(--ah-c); }
+.ah-ticket__numero { font-weight: 800; letter-spacing: .05em; color: var(--ah-s); display: flex; gap: .6rem; align-items: center; margin: 0 0 .3rem; }
+.ah-estado { display: inline-block; font-size: .75rem; font-weight: 800; padding: .2rem .65rem; border-radius: 999px; background: #eee; color: #333; letter-spacing: 0; }
+.ah-estado--abierto { background: #f6e1d6; color: #94401f; }
+.ah-estado--en_proceso { background: #e2eaf7; color: #234a85; }
+.ah-estado--pendiente { background: #f7efd6; color: #7a5a10; }
+.ah-estado--resuelto { background: #e6e8d6; color: #545b33; }
+.ah-estado--cerrado { background: #e6e3df; color: #4b4540; }
+.ah-etapas { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; margin: 1rem 0; counter-reset: etapa; }
+.ah-etapas li { counter-increment: etapa; font-size: .8rem; font-weight: 700; padding: .35rem .7rem; border-radius: 999px; background: #f2ece2; color: var(--ah-s); }
+.ah-etapas li::before { content: counter(etapa) ". "; }
+.ah-etapas li.completa { background: var(--ah-o); color: #fff; }
+.ah-historial { list-style: none; padding: 0; margin: 0 0 1.2rem; display: grid; gap: .6rem; }
+.ah-historial__item { padding: .8rem 1rem; border-radius: 12px; background: #faf6ef; border-left: 3px solid var(--ah-b); }
+.ah-historial__item--respuesta { border-left-color: var(--ah-o); background: #f1f3e8; }
+.ah-historial__item--comentario { border-left-color: var(--ah-c); }
+.ah-historial__meta { display: block; font-size: .78rem; color: var(--ah-s); margin-bottom: .2rem; font-weight: 600; }
+.ah-lista-tickets { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.ah-lista-tickets li { display: flex; justify-content: space-between; gap: .6rem; align-items: center; padding: .6rem 0; border-bottom: 1px dashed var(--ah-b); }
+.ah-canales { list-style: none; padding: 0; margin: 0; display: grid; gap: .8rem; }
+.ah-servicios { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.4rem; }
+.ah-servicio { background: #fff; border: 1px solid var(--borde, #e3d7c4); border-radius: 20px; padding: 1.6rem; display: flex; flex-direction: column; gap: .6rem; }
+.ah-servicio__icono svg { width: 30px; height: 30px; }
+.ah-servicio__beneficios { margin: 0; padding-left: 1.1rem; }
+.ah-servicio__datos { margin: 0; display: grid; gap: .4rem; font-size: .9rem; }
+.ah-servicio__datos dt { font-weight: 800; display: inline; }
+.ah-servicio__datos dt::after { content: ": "; }
+.ah-servicio__datos dd { display: inline; margin: 0; }
+.ah-servicio .ah-boton { margin-top: auto; align-self: flex-start; }
+.ah-faq { display: grid; gap: .8rem; }
+.ah-faq__item { background: #fff; border: 1px solid var(--borde, #e3d7c4); border-radius: 14px; padding: 0 1.2rem; }
+.ah-faq__item summary { cursor: pointer; padding: 1rem 0; font-weight: 700; }
+.ah-faq__item[open] { border-color: var(--terracota, #b5532f); }
+.ah-video { margin: 1.5rem 0; }
+.ah-video iframe, .ah-video video { width: 100%; aspect-ratio: 16 / 9; height: auto; border-radius: 14px; }
+.ah-toast { position: fixed; right: 1.2rem; bottom: 1.2rem; z-index: 999; display: flex; gap: .8rem; align-items: center; max-width: min(380px, calc(100vw - 2.4rem)); padding: .9rem 1.1rem; border-radius: 14px; background: #2a1d16; color: #f7f1e6; box-shadow: 0 20px 50px rgba(0, 0, 0, .25); transform: translateY(20px); opacity: 0; visibility: hidden; transition: all .3s; }
+.ah-toast.visible { transform: none; opacity: 1; visibility: visible; }
+.ah-toast p { margin: 0; }
+.ah-toast a { color: #f6e1d6; font-weight: 800; text-decoration: none; font-size: 1.2rem; }
+@media (max-width: 860px) {
+	.ah-mesa__rejilla, .ah-form__fila { grid-template-columns: 1fr; }
+}
