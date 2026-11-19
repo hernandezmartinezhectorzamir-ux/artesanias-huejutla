@@ -252,6 +252,60 @@
 		}
 	}
 
+	/* Proceso artesanal en video: capítulos, barra de avance y paso al siguiente al terminar.
+	   Nunca reproduce solo: empieza cuando la persona pulsa play o un capítulo. */
+	function iniciarProceso() {
+		var seccion = document.querySelector("[data-ah-proceso]");
+		if (!seccion) { return; }
+		var video = seccion.querySelector("[data-ah-proceso-video]");
+		var capitulos = Array.prototype.slice.call(seccion.querySelectorAll("[data-ah-capitulo]"));
+		var rotuloN = seccion.querySelector("[data-ah-proceso-n]");
+		var rotuloT = seccion.querySelector("[data-ah-proceso-titulo]");
+		if (!video || !capitulos.length) { return; }
+		var actual = 0;
+
+		function marcar(i) {
+			capitulos.forEach(function (c, j) {
+				c.classList.toggle("is-activo", j === i);
+				if (j === i) { c.setAttribute("aria-current", "true"); } else { c.removeAttribute("aria-current"); }
+				var barra = c.querySelector(".ah-proceso__barra span");
+				if (barra) { barra.style.width = j < i ? "100%" : "0"; }
+			});
+			if (rotuloN) { rotuloN.textContent = (i + 1) + " / " + capitulos.length; }
+			if (rotuloT) { rotuloT.textContent = capitulos[i].getAttribute("data-titulo"); }
+		}
+
+		function cargar(i, reproducir) {
+			actual = i;
+			var c = capitulos[i];
+			video.setAttribute("poster", c.getAttribute("data-poster") || "");
+			video.setAttribute("aria-label", c.getAttribute("data-titulo") || "");
+			video.src = c.getAttribute("data-src");
+			marcar(i);
+			if (reproducir) {
+				var promesa = video.play();
+				if (promesa && promesa.catch) { promesa.catch(function () {}); }
+			}
+		}
+
+		capitulos.forEach(function (c, i) {
+			c.addEventListener("click", function (e) {
+				e.preventDefault();
+				cargar(i, true);
+				if (window.matchMedia("(max-width: 1024px)").matches) { video.scrollIntoView({ block: "center", behavior: "smooth" }); }
+			});
+		});
+
+		video.addEventListener("timeupdate", function () {
+			if (!video.duration) { return; }
+			var barra = capitulos[actual].querySelector(".ah-proceso__barra span");
+			if (barra) { barra.style.width = Math.min(100, (video.currentTime / video.duration) * 100) + "%"; }
+		});
+		video.addEventListener("ended", function () {
+			if (actual < capitulos.length - 1) { cargar(actual + 1, true); }
+		});
+	}
+
 	document.addEventListener("DOMContentLoaded", function () {
 		iniciarDesplegables();
 		iniciarMenu();
@@ -259,5 +313,6 @@
 		iniciarRevelado();
 		iniciarFiltros();
 		iniciarAcceso();
+		iniciarProceso();
 	});
 })();

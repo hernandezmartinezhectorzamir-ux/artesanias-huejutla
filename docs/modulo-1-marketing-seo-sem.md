@@ -77,7 +77,9 @@ Además, las páginas privadas emiten `<meta name="robots" content="noindex, fol
 - **ALT, TITLE y pie de foto** en cada imagen importada. El plugin agrega TITLE y ALT de respaldo, y Rank Math completa los faltantes.
 - **WebP:** el plugin convierte los tamaños intermedios a WebP (filtro `image_editor_output_format`). Verificado: todas las imágenes del sitio se sirven como `.webp`.
 - **Lazy loading** en todas las imágenes excepto la principal de la portada, que usa `fetchpriority="high"` y precarga para mejorar el LCP.
-- **Video:** el shortcode `[ah_video url="" titulo="" descripcion="" miniatura="" duracion="PT2M" fecha="2026-11-01"]` incrusta YouTube, Vimeo o MP4 y genera `VideoObject` con título, descripción, miniatura, duración y fecha.
+- **Video:** el shortcode `[ah_video url="" titulo="" descripcion="" miniatura="" duracion="PT2M" fecha="2026-11-01"]` incrusta YouTube, Vimeo o MP4 y genera `VideoObject` con título, descripción, miniatura, duración y fecha. Para un video de la biblioteca de medios basta `[ah_video id="123"]`: toma el título, la descripción, la miniatura, la duración y la fecha del propio archivo.
+- **Videos del proceso artesanal (implementados):** tres clips de 10 s (*Tejido de palma a mano*, *Bordado de flores a mano* y *Artesanías listas para ti*) con nombres de archivo descriptivos, miniaturas WebP con texto alternativo y descripciones. Se muestran en la portada (sección *Así nace cada pieza*, con capítulos que avanzan solos), en *Historia de los artesanos* (`[ah_videos_proceso]`) y en *Nosotros*. Cada página publica un `VideoObject` por video, sin duplicados. Los videos se generaron con inteligencia artificial y así se indica en el sitio y en sus datos.
+- **Administración:** un video entra al proceso con el campo personalizado `_ah_video_proceso` (orden 1, 2, 3…) y su miniatura con `_ah_poster_id`. Los archivos viven en `wp-content/uploads`, que no se sube al repositorio. Para producción se recomienda subirlos también a YouTube y usar `[ah_video url="https://youtu.be/…"]`.
 
 ## 2. Campaña SEM (simulación)
 

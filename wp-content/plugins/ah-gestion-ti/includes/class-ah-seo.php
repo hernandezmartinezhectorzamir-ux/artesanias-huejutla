@@ -36,6 +36,7 @@ final class AH_SEO {
 		add_filter( 'wp_get_attachment_image_attributes', array( __CLASS__, 'atributos_imagen' ), 10, 2 );
 		add_filter( 'image_editor_output_format', array( __CLASS__, 'formato_webp' ) );
 		add_shortcode( 'ah_video', array( __CLASS__, 'shortcode_video' ) );
+		add_shortcode( 'ah_videos_proceso', array( __CLASS__, 'shortcode_videos_proceso' ) );
 		add_shortcode( 'ah_faq', array( __CLASS__, 'shortcode_faq' ) );
 		add_action( 'wp_footer', array( __CLASS__, 'imprimir_schemas' ), 50 );
 		add_action( 'wp_head', array( __CLASS__, 'respaldo_meta' ), 3 );
@@ -151,14 +152,118 @@ final class AH_SEO {
 	}
 
 	/**
-	 * [ah_video url="" titulo="" descripcion="" miniatura="" duracion="PT1M30S" fecha="2026-11-01"]
+	 * Datos de un video de la biblioteca de medios: URL, título, descripción, miniatura, duración y fecha.
+	 *
+	 * La miniatura se toma de la meta _ah_poster_id (o de la imagen destacada del adjunto).
+	 *
+	 * @param int $id ID del adjunto de video.
+	 * @return array<string,string>|null
+	 */
+	public static function datos_video( $id ) {
+		$adjunto = get_post( $id );
+		if ( ! $adjunto || 'attachment' !== $adjunto->post_type || ! wp_attachment_is( 'video', $adjunto ) ) {
+			return null;
+		}
+		$meta   = wp_get_attachment_metadata( $adjunto->ID );
+		$poster = (int) get_post_meta( $adjunto->ID, '_ah_poster_id', true );
+		$poster = $poster ? $poster : (int) get_post_thumbnail_id( $adjunto->ID );
+		$largo  = isset( $meta['length'] ) ? (int) $meta['length'] : 0;
+		return array(
+			'id'          => (string) $adjunto->ID,
+			'url'         => (string) wp_get_attachment_url( $adjunto->ID ),
+			'titulo'      => get_the_title( $adjunto ),
+			'descripcion' => $adjunto->post_excerpt ? $adjunto->post_excerpt : wp_strip_all_tags( $adjunto->post_content ),
+			'detalle'     => wp_strip_all_tags( $adjunto->post_content ),
+			'miniatura'   => $poster ? (string) wp_get_attachment_image_url( $poster, 'full' ) : '',
+			'alt'         => $poster ? (string) get_post_meta( $poster, '_wp_attachment_image_alt', true ) : '',
+			'duracion'    => $largo ? 'PT' . ( $largo >= 60 ? floor( $largo / 60 ) . 'M' : '' ) . ( $largo % 60 ) . 'S' : '',
+			'segundos'    => (string) $largo,
+			'fecha'       => get_the_date( 'c', $adjunto ),
+			'ia'          => get_post_meta( $adjunto->ID, '_ah_video_ia', true ) ? '1' : '',
+		);
+	}
+
+	/**
+	 * Videos del proceso artesanal (adjuntos con la meta _ah_video_proceso), en orden.
+	 *
+	 * @return array<int,array<string,string>>
+	 */
+	public static function videos_proceso() {
+		$ids = get_posts(
+			array(
+				'post_type'      => 'attachment',
+				'post_status'    => 'inherit',
+				'post_mime_type' => 'video',
+				'posts_per_page' => 6,
+				'fields'         => 'ids',
+				'meta_key'       => '_ah_video_proceso', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Pocos adjuntos.
+				'orderby'        => 'meta_value_num',
+				'order'          => 'ASC',
+			)
+		);
+		return array_values( array_filter( array_map( array( __CLASS__, 'datos_video' ), $ids ) ) );
+	}
+
+	/**
+	 * Registra un VideoObject para imprimirlo en el pie (una sola vez por URL).
+	 *
+	 * @param array<string,string> $v Datos del video (ver datos_video()).
+	 */
+	public static function agregar_schema_video( array $v ) {
+		foreach ( self::$schemas as $existente ) {
+			if ( 'VideoObject' === ( $existente['@type'] ?? '' ) && ( $existente['contentUrl'] ?? '' ) === $v['url'] ) {
+				return;
+			}
+		}
+		$schema = array(
+			'@context'    => 'https://schema.org',
+			'@type'       => 'VideoObject',
+			'name'        => $v['titulo'],
+			'description' => ! empty( $v['detalle'] ) ? $v['detalle'] : ( $v['descripcion'] ? $v['descripcion'] : $v['titulo'] ),
+			'contentUrl'  => $v['url'],
+		);
+		if ( ! empty( $v['miniatura'] ) ) {
+			$schema['thumbnailUrl'] = $v['miniatura'];
+		}
+		if ( ! empty( $v['duracion'] ) ) {
+			$schema['duration'] = $v['duracion'];
+		}
+		if ( ! empty( $v['fecha'] ) ) {
+			$schema['uploadDate'] = $v['fecha'];
+		}
+		self::$schemas[] = $schema;
+	}
+
+	/**
+	 * [ah_videos_proceso limite="3"]: cuadrícula con los videos del proceso artesanal.
+	 *
+	 * @param array<string,string>|string $atts Atributos.
+	 * @return string
+	 */
+	public static function shortcode_videos_proceso( $atts = array() ) {
+		$a      = shortcode_atts( array( 'limite' => '6' ), $atts, 'ah_videos_proceso' );
+		$videos = array_slice( self::videos_proceso(), 0, max( 1, absint( $a['limite'] ) ) );
+		if ( ! $videos ) {
+			return '';
+		}
+		$html = '';
+		foreach ( $videos as $v ) {
+			$html .= self::shortcode_video( array( 'id' => $v['id'] ) );
+		}
+		return '<div class="ah-videos">' . $html . '</div>';
+	}
+
+	/**
+	 * [ah_video id="123"] para un video de la biblioteca de medios, o
+	 * [ah_video url="" titulo="" descripcion="" miniatura="" duracion="PT1M30S" fecha="2026-11-01"] para YouTube, Vimeo o MP4 externo.
 	 *
 	 * @param array<string,string> $atts Atributos.
 	 * @return string
 	 */
 	public static function shortcode_video( $atts ) {
-		$a = shortcode_atts(
+		$a  = shortcode_atts(
 			array(
+				'id'          => '',
 				'url'         => '',
 				'titulo'      => '',
 				'descripcion' => '',
@@ -169,33 +274,31 @@ final class AH_SEO {
 			$atts,
 			'ah_video'
 		);
+		$ia = '';
+		if ( $a['id'] ) {
+			$v = self::datos_video( absint( $a['id'] ) );
+			if ( ! $v ) {
+				return current_user_can( 'edit_posts' ) ? '<p><em>' . esc_html__( '[ah_video] el id no corresponde a un video de la biblioteca de medios.', 'ah-gestion-ti' ) . '</em></p>' : '';
+			}
+			// Los atributos escritos en el shortcode tienen prioridad sobre los del adjunto.
+			foreach ( array( 'url', 'titulo', 'descripcion', 'miniatura', 'duracion', 'fecha' ) as $campo ) {
+				$a[ $campo ] = $a[ $campo ] ? $a[ $campo ] : $v[ $campo ];
+			}
+			$a['detalle'] = $v['detalle'];
+			$ia           = $v['ia'];
+		}
 		if ( ! $a['url'] || ! $a['titulo'] ) {
-			return current_user_can( 'edit_posts' ) ? '<p><em>' . esc_html__( '[ah_video] requiere los atributos url y titulo.', 'ah-gestion-ti' ) . '</em></p>' : '';
+			return current_user_can( 'edit_posts' ) ? '<p><em>' . esc_html__( '[ah_video] requiere id, o bien los atributos url y titulo.', 'ah-gestion-ti' ) . '</em></p>' : '';
 		}
-		$embed = wp_oembed_get( esc_url_raw( $a['url'] ) );
+		$embed = $a['id'] ? false : wp_oembed_get( esc_url_raw( $a['url'] ) );
 		if ( ! $embed ) {
-			$embed = '<video controls preload="none"' . ( $a['miniatura'] ? ' poster="' . esc_url( $a['miniatura'] ) . '"' : '' ) . '><source src="' . esc_url( $a['url'] ) . '"></video>';
+			$embed = '<video controls playsinline preload="none"' . ( $a['miniatura'] ? ' poster="' . esc_url( $a['miniatura'] ) . '"' : '' ) . ' aria-label="' . esc_attr( $a['titulo'] ) . '"><source src="' . esc_url( $a['url'] ) . '" type="' . esc_attr( wp_check_filetype( $a['url'] )['type'] ? wp_check_filetype( $a['url'] )['type'] : 'video/mp4' ) . '"></video>';
 		}
 
-		$schema = array(
-			'@context'    => 'https://schema.org',
-			'@type'       => 'VideoObject',
-			'name'        => $a['titulo'],
-			'description' => $a['descripcion'] ? $a['descripcion'] : $a['titulo'],
-			'contentUrl'  => $a['url'],
-		);
-		if ( $a['miniatura'] ) {
-			$schema['thumbnailUrl'] = $a['miniatura'];
-		}
-		if ( $a['duracion'] ) {
-			$schema['duration'] = $a['duracion'];
-		}
-		if ( $a['fecha'] ) {
-			$schema['uploadDate'] = $a['fecha'];
-		}
-		self::$schemas[] = $schema;
+		self::agregar_schema_video( $a );
 
-		return '<figure class="ah-video">' . $embed . '<figcaption><strong>' . esc_html( $a['titulo'] ) . '</strong>' . ( $a['descripcion'] ? ' — ' . esc_html( $a['descripcion'] ) : '' ) . '</figcaption></figure>';
+		$nota = $ia ? '<span class="ah-video__ia">' . esc_html__( 'Video ilustrativo generado con IA', 'ah-gestion-ti' ) . '</span>' : '';
+		return '<figure class="ah-video">' . $embed . '<figcaption><strong>' . esc_html( $a['titulo'] ) . '</strong>' . ( $a['descripcion'] ? ' — ' . esc_html( $a['descripcion'] ) : '' ) . $nota . '</figcaption></figure>';
 	}
 
 	/**

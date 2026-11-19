@@ -195,6 +195,49 @@ $ah_historia   = get_page_by_path( 'historia-de-los-artesanos' );
 	</section>
 
 	<?php
+	$ah_videos = class_exists( 'AH_SEO' ) ? AH_SEO::videos_proceso() : array();
+	if ( $ah_videos ) :
+		array_map( array( 'AH_SEO', 'agregar_schema_video' ), $ah_videos );
+		$ah_primero = $ah_videos[0];
+		$ah_hay_ia  = (bool) array_filter( wp_list_pluck( $ah_videos, 'ia' ) );
+		?>
+		<section class="ah-seccion ah-proceso" aria-labelledby="ah-proceso-titulo" data-ah-proceso>
+			<div class="ah-contenedor ah-proceso__rejilla">
+				<div class="ah-proceso__texto ah-revelar">
+					<p class="ah-antetitulo"><?php esc_html_e( 'Del taller a tu casa', 'artesanias-huejutla' ); ?></p>
+					<h2 id="ah-proceso-titulo"><?php esc_html_e( 'Así nace cada pieza', 'artesanias-huejutla' ); ?></h2>
+					<p class="ah-proceso__intro"><?php esc_html_e( 'Palma, hilo y paciencia. Mira en unos segundos el camino de una artesanía huasteca, desde las manos que la tejen hasta la mesa donde espera por ti.', 'artesanias-huejutla' ); ?></p>
+					<ol class="ah-proceso__capitulos">
+						<?php foreach ( $ah_videos as $ah_i => $ah_v ) : ?>
+							<li>
+								<a class="ah-proceso__capitulo<?php echo 0 === $ah_i ? ' is-activo' : ''; ?>" href="<?php echo esc_url( $ah_v['url'] ); ?>" data-ah-capitulo="<?php echo esc_attr( (string) $ah_i ); ?>" data-src="<?php echo esc_url( $ah_v['url'] ); ?>" data-poster="<?php echo esc_url( $ah_v['miniatura'] ); ?>" data-titulo="<?php echo esc_attr( $ah_v['titulo'] ); ?>" <?php echo 0 === $ah_i ? 'aria-current="true"' : ''; ?>>
+									<span class="ah-proceso__numero" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $ah_i + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></span>
+									<span class="ah-proceso__info">
+										<strong><?php echo esc_html( $ah_v['titulo'] ); ?></strong>
+										<span><?php echo esc_html( $ah_v['descripcion'] ); ?></span>
+									</span>
+									<span class="ah-proceso__duracion"><?php echo esc_html( $ah_v['segundos'] ? '0:' . str_pad( $ah_v['segundos'], 2, '0', STR_PAD_LEFT ) : '' ); ?></span>
+									<span class="ah-proceso__barra" aria-hidden="true"><span></span></span>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ol>
+					<?php if ( $ah_hay_ia ) : ?>
+						<p class="ah-proceso__nota"><?php esc_html_e( 'Videos ilustrativos generados con inteligencia artificial a partir de las técnicas tradicionales de la región.', 'artesanias-huejutla' ); ?></p>
+					<?php endif; ?>
+				</div>
+				<div class="ah-proceso__pantalla ah-revelar">
+					<video class="ah-proceso__video" controls playsinline preload="none" poster="<?php echo esc_url( $ah_primero['miniatura'] ); ?>" aria-label="<?php echo esc_attr( $ah_primero['titulo'] ); ?>" data-ah-proceso-video>
+						<source src="<?php echo esc_url( $ah_primero['url'] ); ?>" type="video/mp4">
+						<a href="<?php echo esc_url( $ah_primero['url'] ); ?>"><?php esc_html_e( 'Descargar el video', 'artesanias-huejutla' ); ?></a>
+					</video>
+					<p class="ah-proceso__rotulo" aria-live="polite"><span data-ah-proceso-n>1 / <?php echo esc_html( (string) count( $ah_videos ) ); ?></span> <span data-ah-proceso-titulo><?php echo esc_html( $ah_primero['titulo'] ); ?></span></p>
+				</div>
+			</div>
+		</section>
+	<?php endif; ?>
+
+	<?php
 	$ah_hay_ventas = $ah_wc && (bool) get_posts(
 		array(
 			'post_type'   => 'product',
