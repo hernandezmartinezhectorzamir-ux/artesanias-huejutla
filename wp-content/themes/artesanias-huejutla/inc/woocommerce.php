@@ -201,3 +201,23 @@ add_filter(
 		return $campos;
 	}
 );
+
+/*
+ * ---------- Ficha de producto: galería y resumen en su propio contenedor ----------
+ * La galería es "sticky"; si su contenedor fuera todo div.product (que incluye pestañas,
+ * valoraciones y relacionados), al bajar quedaría encima de ellos. Así solo acompaña al resumen.
+ */
+add_action(
+	'woocommerce_before_single_product_summary',
+	static function () {
+		echo '<div class="ah-producto-principal">';
+	},
+	1
+);
+add_action(
+	'woocommerce_after_single_product_summary',
+	static function () {
+		echo '</div>';
+	},
+	1
+);

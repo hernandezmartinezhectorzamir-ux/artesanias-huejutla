@@ -93,15 +93,16 @@
 .woocommerce ul.products li.product .button.product_type_simple:not(.ajax_add_to_cart) { background: var(--olivo); }
 
 /* ---------- Ficha de producto ---------- */
-.woocommerce div.product { display: grid; grid-template-columns: 1.05fr 1fr; gap: 0 clamp(2rem, 5vw, 4rem); align-items: start; }
-.woocommerce div.product > * { grid-column: 1 / -1; }
+.woocommerce div.product { display: block; }
+.ah-producto-principal { position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 0 clamp(2rem, 5vw, 4rem); align-items: start; }
+.ah-producto-principal > * { grid-column: 1 / -1; }
 .woocommerce div.product div.images, .woocommerce div.product div.summary { width: 100% !important; float: none !important; margin: 0 !important; }
 .woocommerce div.product div.images { grid-column: 1; }
 /* Mayor especificidad que la regla 'position: relative' de WooCommerce. */
 .woocommerce div.product div.images.woocommerce-product-gallery { position: sticky; top: 140px; }
 .woocommerce div.product div.summary { grid-column: 2; }
 .woocommerce div.product { position: relative; }
-.woocommerce div.product > span.onsale { position: absolute; top: 16px; left: 16px; z-index: 5; }
+.woocommerce div.product .ah-producto-principal > span.onsale { position: absolute; top: 16px; left: 16px; z-index: 5; }
 .woocommerce div.product div.images .woocommerce-product-gallery__wrapper { border-radius: var(--radio-l); overflow: hidden; }
 .woocommerce div.product div.images .flex-control-thumbs { display: flex; gap: .8rem; margin-top: 1rem; }
 .woocommerce div.product div.images .flex-control-thumbs li { width: 88px !important; border-radius: var(--radio); overflow: hidden; }
@@ -328,7 +329,7 @@
 	.ah-filtros__panel:not([open]) { padding-block: 1rem; }
 	.woocommerce ul.products, .woocommerce ul.products.columns-4 { grid-template-columns: repeat(2, 1fr); }
 	.woocommerce ul.products.columns-4 > li:nth-child(4) { display: flex; }
-	.woocommerce div.product { display: block; }
+	.ah-producto-principal { display: block; }
 	.woocommerce div.product div.images.woocommerce-product-gallery { position: relative; top: auto; }
 	.woocommerce div.product div.summary { margin-top: 1.5rem !important; }
 	.woocommerce-cart .woocommerce, .woocommerce-checkout form.checkout, .woocommerce-account .woocommerce { grid-template-columns: 1fr; }
@@ -384,3 +385,13 @@
 .woocommerce .woocommerce-error::before, .woocommerce .woocommerce-info::before, .woocommerce .woocommerce-message::before,
 .woocommerce-page .woocommerce-error::before, .woocommerce-page .woocommerce-info::before, .woocommerce-page .woocommerce-message::before { left: 1.1rem; top: 1.05rem; }
 .woocommerce-error:focus, .woocommerce-info:focus, .woocommerce-message:focus { outline: none; box-shadow: 0 0 0 3px rgba(179, 38, 30, .15); }
+
+/* Valoraciones: el ancla #reviews / #tab-reviews no queda bajo el encabezado fijo. */
+.woocommerce div.product .woocommerce-tabs, .woocommerce #reviews, .woocommerce #review_form_wrapper { scroll-margin-top: 160px; }
+.woocommerce #review_form #respond { padding: 1.6rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--blanco); }
+.woocommerce #review_form #respond .comment-form-rating label, .woocommerce #review_form #respond .comment-form-comment label { display: block; margin-bottom: .4rem; font-weight: 700; color: var(--marron); }
+.woocommerce #review_form #respond p.stars { margin: .2rem 0 1rem; }
+.woocommerce #review_form #respond p.stars a { font-size: 1.6rem; }
+.woocommerce #review_form #respond textarea { width: 100%; min-height: 140px; padding: .8rem 1rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--crema); font: inherit; }
+.woocommerce #review_form #respond textarea:focus { outline: 0; border-color: var(--terracota); background: var(--blanco); box-shadow: 0 0 0 4px rgba(181, 83, 47, .14); }
+.woocommerce #review_form #respond .form-submit { margin: 1rem 0 0; }
