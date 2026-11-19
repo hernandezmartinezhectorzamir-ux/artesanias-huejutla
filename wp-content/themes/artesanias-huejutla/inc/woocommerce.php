@@ -238,3 +238,15 @@ add_filter(
 		return wp_nonce_url( wc_get_account_endpoint_url( 'customer-logout' ), 'customer-logout' );
 	}
 );
+
+/* ---------- Paginación de la tienda: "← Anterior" / "Siguiente →" ---------- */
+add_filter(
+	'woocommerce_pagination_args',
+	static function ( $args ) {
+		$args['prev_text'] = ah_tema_texto_paginacion( 'anterior' );
+		$args['next_text'] = ah_tema_texto_paginacion( 'siguiente' );
+		$args['end_size']  = 1;
+		$args['mid_size']  = 1;
+		return $args;
+	}
+);

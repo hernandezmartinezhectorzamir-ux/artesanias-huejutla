@@ -395,3 +395,73 @@
 .woocommerce #review_form #respond textarea { width: 100%; min-height: 140px; padding: .8rem 1rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--crema); font: inherit; }
 .woocommerce #review_form #respond textarea:focus { outline: 0; border-color: var(--terracota); background: var(--blanco); box-shadow: 0 0 0 4px rgba(181, 83, 47, .14); }
 .woocommerce #review_form #respond .form-submit { margin: 1rem 0 0; }
+
+/* ---------- Mi cuenta: menú con íconos ---------- */
+.woocommerce-account.logged-in .woocommerce { grid-template-columns: 270px minmax(0, 1fr); }
+.ah-cuenta-menu ul { position: sticky; top: 130px; display: grid; gap: .2rem; padding: .7rem !important; box-shadow: var(--sombra-s); }
+.ah-cuenta-menu li a, .ah-contenido .ah-cuenta-menu li a { display: flex; align-items: center; gap: .8rem; padding: .7rem .9rem; border-radius: var(--radio); color: var(--gris); font-weight: 600; text-decoration: none !important; transition: background var(--transicion), color var(--transicion); }
+.ah-cuenta-menu__icono { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 50%; background: var(--crema); color: var(--terracota); transition: background var(--transicion), color var(--transicion); }
+.ah-cuenta-menu li a:hover { background: var(--crema); color: var(--marron); }
+.ah-cuenta-menu li a:hover .ah-cuenta-menu__icono { background: var(--blanco); }
+.ah-cuenta-menu li a:focus-visible { outline: 3px solid var(--oro); outline-offset: 2px; }
+.ah-cuenta-menu li.is-active a { background: var(--marron); color: var(--crema); }
+.ah-cuenta-menu li.is-active .ah-cuenta-menu__icono { background: var(--terracota); color: var(--blanco); }
+.ah-cuenta-menu li.woocommerce-MyAccount-navigation-link--customer-logout { margin-top: .4rem; padding-top: .5rem; border-top: 1px dashed var(--borde); }
+.ah-cuenta-menu li.woocommerce-MyAccount-navigation-link--customer-logout a { color: var(--gris-suave); }
+.ah-cuenta-menu li.woocommerce-MyAccount-navigation-link--customer-logout .ah-cuenta-menu__icono { background: transparent; color: var(--gris-suave); }
+.ah-cuenta-menu li.woocommerce-MyAccount-navigation-link--customer-logout a:hover { background: var(--terracota-claro); color: var(--error); }
+.ah-cuenta-menu li.woocommerce-MyAccount-navigation-link--customer-logout a:hover .ah-cuenta-menu__icono { color: var(--error); }
+
+/* ---------- Mi cuenta: escritorio ---------- */
+.ah-escritorio { display: grid; gap: 1.4rem; }
+.ah-escritorio__bienvenida { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.2rem; align-items: center; padding: 1.6rem 1.8rem 1.9rem; border-radius: var(--radio-l); background: radial-gradient(120% 140% at 0% 0%, #5a3d2c 0%, var(--marron) 50%, var(--marron-oscuro) 100%); color: var(--beige); overflow: hidden; }
+.ah-escritorio__bienvenida::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: var(--greca) repeat-x center / 24px 12px; opacity: .5; }
+.ah-escritorio__avatar { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--terracota); color: var(--blanco); font-family: var(--f-titulo); font-size: 1.5rem; font-weight: 700; box-shadow: 0 0 0 4px rgba(247, 241, 230, .15); }
+.ah-escritorio__ante { margin: 0 0 .15rem; font-size: .72rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--oro); }
+.ah-contenido .ah-escritorio__saludo h2, .ah-escritorio__saludo h2 { margin: 0; font-size: clamp(1.5rem, 2.6vw, 1.9rem) !important; color: var(--crema); }
+.ah-escritorio__meta { margin: .3rem 0 0; font-size: .88rem; color: #d8c8af; overflow-wrap: anywhere; }
+.ah-escritorio__meta span { margin: 0 .35rem; }
+.woocommerce-account .ah-escritorio__tienda { gap: .5rem; white-space: nowrap; color: var(--marron) !important; }
+.ah-escritorio__resumen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .9rem; }
+.ah-escritorio__dato, .ah-contenido .ah-escritorio__dato { display: grid; gap: .15rem; padding: 1rem 1.1rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--blanco); color: var(--gris-suave); text-decoration: none !important; transition: border-color var(--transicion), transform var(--transicion), box-shadow var(--transicion); }
+.ah-escritorio__dato:hover { border-color: var(--terracota); transform: translateY(-2px); box-shadow: var(--sombra-s); }
+.ah-escritorio__dato-icono { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: .35rem; border-radius: 50%; background: var(--crema); color: var(--gris-suave); }
+.ah-escritorio__dato.is-activo .ah-escritorio__dato-icono { background: var(--terracota-claro); color: var(--terracota); }
+.ah-escritorio__dato strong { font-family: var(--f-titulo); font-size: 1.9rem; line-height: 1; color: var(--marron); }
+.ah-escritorio__dato span:last-child { font-size: .85rem; font-weight: 600; }
+.ah-escritorio__ultima { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 1rem; align-items: center; padding: 1.2rem 1.4rem; border: 1px solid var(--borde); border-left: 4px solid var(--terracota); border-radius: var(--radio); background: var(--blanco); }
+.ah-contenido .ah-escritorio__ultima h3, .ah-escritorio__ultima h3 { margin: 0 0 .2rem; font-size: 1.1rem; color: var(--marron); }
+.ah-escritorio__ultima p { margin: 0; font-size: .9rem; color: var(--gris-suave); }
+.ah-escritorio__ultima--vacia { border-left-color: var(--olivo); }
+.ah-escritorio__estado { padding: .35rem .8rem; border-radius: 999px; background: var(--crema-2); color: var(--marron); font-size: .8rem; font-weight: 800; white-space: nowrap; }
+.ah-escritorio__estado--processing, .ah-escritorio__estado--on-hold, .ah-escritorio__estado--pending { background: #fbf0d9; color: #8a5a00; }
+.ah-escritorio__estado--en-camino { background: #e3eef9; color: #1d4f86; }
+.ah-escritorio__estado--completed { background: var(--olivo-claro); color: var(--olivo-oscuro); }
+.ah-escritorio__estado--cancelled, .ah-escritorio__estado--failed, .ah-escritorio__estado--refunded { background: var(--terracota-claro); color: var(--error); }
+.ah-contenido .ah-escritorio__subtitulo, .ah-escritorio__subtitulo { margin: .4rem 0 -.4rem; font-size: 1.05rem; color: var(--marron); }
+.ah-escritorio__accesos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+.ah-escritorio__acceso, .ah-contenido .ah-escritorio__acceso { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .9rem; align-items: center; height: 100%; padding: 1.1rem 1.2rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--blanco); color: var(--gris-suave); text-decoration: none !important; transition: border-color var(--transicion), box-shadow var(--transicion); }
+.ah-escritorio__acceso:hover { border-color: var(--terracota); box-shadow: var(--sombra-s); }
+.ah-escritorio__acceso-icono { display: grid; place-items: center; width: 46px; height: 46px; border-radius: var(--radio); background: var(--crema); color: var(--terracota); }
+.ah-escritorio__acceso-texto strong { display: block; color: var(--marron); font-size: 1rem; }
+.ah-escritorio__acceso-texto span { display: block; font-size: .86rem; line-height: 1.45; }
+.ah-escritorio__flecha { color: var(--terracota); font-weight: 700; transition: transform var(--transicion); }
+.ah-escritorio__acceso:hover .ah-escritorio__flecha { transform: translateX(4px); }
+@media (max-width: 1024px) {
+	.woocommerce-account.logged-in .woocommerce { grid-template-columns: minmax(0, 1fr); }
+	.ah-cuenta-menu ul { position: static; display: flex; padding: .4rem !important; }
+	.ah-cuenta-menu li a, .ah-contenido .ah-cuenta-menu li a { padding: .4rem .9rem .4rem .45rem; border-radius: 999px; }
+	.ah-cuenta-menu__icono { flex-basis: 28px; height: 28px; }
+	.ah-cuenta-menu li.woocommerce-MyAccount-navigation-link--customer-logout { margin: 0; padding: 0; border: 0; }
+}
+@media (max-width: 860px) {
+	.ah-escritorio__resumen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.ah-escritorio__accesos { grid-template-columns: 1fr; }
+	.ah-escritorio__bienvenida { grid-template-columns: auto minmax(0, 1fr); }
+	.woocommerce-account .ah-escritorio__tienda { grid-column: 1 / -1; justify-self: start; }
+	.ah-escritorio__ultima { grid-template-columns: minmax(0, 1fr) auto; }
+	.ah-escritorio__ultima .ah-boton { grid-column: 1 / -1; justify-self: start; }
+}
+.ah-contenido .ah-escritorio ul, .ah-escritorio ul { margin: 0; padding: 0; list-style: none; }
+.ah-contenido .ah-escritorio ul > li, .ah-escritorio ul > li { margin: 0; padding: 0; }
+.ah-contenido .ah-escritorio ul > li::before, .ah-contenido .ah-escritorio ul > li::marker { content: none; }

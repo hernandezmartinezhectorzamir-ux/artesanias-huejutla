@@ -51,8 +51,8 @@ if ( is_home() && $ah_blog ) {
 			<?php
 			the_posts_pagination(
 				array(
-					'prev_text' => __( 'Anterior', 'artesanias-huejutla' ),
-					'next_text' => __( 'Siguiente', 'artesanias-huejutla' ),
+					'prev_text' => ah_tema_texto_paginacion( 'anterior' ),
+					'next_text' => ah_tema_texto_paginacion( 'siguiente' ),
 				)
 			);
 			?>

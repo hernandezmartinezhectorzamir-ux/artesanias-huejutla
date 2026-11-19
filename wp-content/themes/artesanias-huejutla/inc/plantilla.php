@@ -246,3 +246,16 @@ function ah_tema_enlaces_cuenta( $clase ) {
 	}
 	echo '</ul>';
 }
+
+/**
+ * Texto de "Anterior"/"Siguiente" en la paginación: flecha y palabra (la palabra se oculta en celular).
+ *
+ * @param string $tipo anterior|siguiente.
+ * @return string HTML.
+ */
+function ah_tema_texto_paginacion( $tipo ) {
+	if ( 'anterior' === $tipo ) {
+		return '<span class="ah-paginacion__flecha" aria-hidden="true">←</span><span class="ah-paginacion__texto">' . esc_html__( 'Anterior', 'artesanias-huejutla' ) . '</span>';
+	}
+	return '<span class="ah-paginacion__texto">' . esc_html__( 'Siguiente', 'artesanias-huejutla' ) . '</span><span class="ah-paginacion__flecha" aria-hidden="true">→</span>';
+}
