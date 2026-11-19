@@ -141,6 +141,24 @@ final class AH_Ajustes {
 					),
 				),
 			),
+			'demo'         => array(
+				'titulo'      => __( 'Cuenta de prueba en la pantalla de acceso', 'ah-gestion-ti' ),
+				'descripcion' => __( 'Muestra a los visitantes un correo y una contraseña de una cuenta de CLIENTE para revisar el sitio (por ejemplo, durante la evaluación). Solo se aceptan cuentas con rol de cliente: nunca una cuenta de administrador o del personal. Desactívela cuando la tienda opere con clientes reales.', 'ah-gestion-ti' ),
+				'campos'      => array(
+					'demo_activa' => array(
+						'etiqueta' => __( 'Mostrar la cuenta de prueba', 'ah-gestion-ti' ),
+						'tipo'     => 'checkbox',
+					),
+					'demo_correo' => array(
+						'etiqueta' => __( 'Correo de la cuenta de prueba', 'ah-gestion-ti' ),
+						'tipo'     => 'email',
+					),
+					'demo_clave'  => array(
+						'etiqueta' => __( 'Contraseña de la cuenta de prueba', 'ah-gestion-ti' ),
+						'tipo'     => 'text',
+					),
+				),
+			),
 		);
 	}
 
@@ -289,6 +307,22 @@ final class AH_Ajustes {
 		// Si se pegó la etiqueta completa de Search Console, conserva solo el valor "content".
 		if ( preg_match( '/content=["\']([^"\']+)["\']/', $entrada['gsc_verificacion'] ?? '', $coincide ) ) {
 			$limpio['gsc_verificacion'] = sanitize_text_field( $coincide[1] );
+		}
+		// La cuenta de prueba debe existir y ser solo de cliente: nunca se publican credenciales del personal.
+		if ( $limpio['demo_correo'] ) {
+			$demo = get_user_by( 'email', $limpio['demo_correo'] );
+			if ( ! $demo ) {
+				add_settings_error( self::OPCION, 'demo', __( 'No existe un usuario con el correo de la cuenta de prueba.', 'ah-gestion-ti' ) );
+				$limpio['demo_activa'] = '';
+			} elseif ( array_diff( (array) $demo->roles, array( 'customer', 'subscriber' ) ) || user_can( $demo, 'edit_posts' ) ) {
+				add_settings_error( self::OPCION, 'demo', __( 'Por seguridad, la cuenta de prueba solo puede ser de un cliente. Se borraron los datos capturados.', 'ah-gestion-ti' ) );
+				$limpio['demo_activa'] = '';
+				$limpio['demo_correo'] = '';
+				$limpio['demo_clave']  = '';
+			}
+		}
+		if ( $limpio['demo_activa'] && ( ! $limpio['demo_correo'] || ! $limpio['demo_clave'] ) ) {
+			$limpio['demo_activa'] = '';
 		}
 		if ( $limpio['whatsapp'] && '' === AH_Calculos::whatsapp_normalizado( $limpio['whatsapp'] ) ) {
 			add_settings_error( self::OPCION, 'whatsapp', __( 'El número de WhatsApp debe tener entre 10 y 15 dígitos con lada internacional.', 'ah-gestion-ti' ) );

@@ -162,11 +162,102 @@
 		});
 	}
 
+	/* Acceso y registro: pestañas accesibles, copiar datos y cuenta de prueba. Sin JS, ambos formularios quedan visibles. */
+	function iniciarAcceso() {
+		var caja = document.querySelector("[data-ah-acceso]");
+		if (!caja) { return; }
+		var pestanas = Array.prototype.slice.call(caja.querySelectorAll("[data-ah-tab]"));
+		var paneles = Array.prototype.slice.call(caja.querySelectorAll("[data-ah-panel]"));
+
+		function mostrar(nombre, enfocar) {
+			if (!pestanas.length) { return; }
+			caja.setAttribute("data-activa", nombre);
+			pestanas.forEach(function (p) {
+				var activa = p.getAttribute("data-ah-tab") === nombre;
+				p.setAttribute("aria-selected", activa ? "true" : "false");
+				p.tabIndex = activa ? 0 : -1;
+				if (activa && enfocar) { p.focus(); }
+			});
+			paneles.forEach(function (panel) { panel.hidden = panel.getAttribute("data-ah-panel") !== nombre; });
+		}
+
+		pestanas.forEach(function (p, i) {
+			p.addEventListener("click", function () { mostrar(p.getAttribute("data-ah-tab"), false); });
+			p.addEventListener("keydown", function (e) {
+				if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+					e.preventDefault();
+					var siguiente = pestanas[(i + (e.key === "ArrowRight" ? 1 : pestanas.length - 1)) % pestanas.length];
+					mostrar(siguiente.getAttribute("data-ah-tab"), true);
+				}
+			});
+		});
+		caja.querySelectorAll("[data-ah-ir]").forEach(function (b) {
+			b.addEventListener("click", function () {
+				var destino = b.getAttribute("data-ah-ir");
+				mostrar(destino, false);
+				var campo = caja.querySelector(destino === "registro" ? "#reg_email" : "#username");
+				if (campo) { campo.focus(); }
+			});
+		});
+
+		var inicial = location.hash === "#crear-cuenta" ? "registro" : (caja.getAttribute("data-inicial") || "acceder");
+		mostrar(inicial, false);
+		window.addEventListener("hashchange", function () { if (location.hash === "#crear-cuenta") { mostrar("registro", false); } });
+
+		var aviso = caja.querySelector("[data-ah-demo-aviso]");
+		function avisar(texto) { if (aviso) { aviso.textContent = texto; } }
+
+		caja.querySelectorAll("[data-ah-copiar]").forEach(function (b) {
+			b.addEventListener("click", function () {
+				var valor = b.getAttribute("data-ah-copiar");
+				var listo = function () {
+					b.classList.add("is-copiado");
+					avisar("Copiado al portapapeles.");
+					setTimeout(function () { b.classList.remove("is-copiado"); }, 1600);
+				};
+				if (navigator.clipboard && window.isSecureContext) {
+					navigator.clipboard.writeText(valor).then(listo, function () { avisar("No se pudo copiar; selecciona el texto manualmente."); });
+				} else {
+					var temporal = document.createElement("textarea");
+					temporal.value = valor;
+					temporal.setAttribute("readonly", "");
+					temporal.style.position = "absolute";
+					temporal.style.left = "-9999px";
+					document.body.appendChild(temporal);
+					temporal.select();
+					try { document.execCommand("copy"); listo(); } catch (err) { avisar("No se pudo copiar; selecciona el texto manualmente."); }
+					document.body.removeChild(temporal);
+				}
+			});
+		});
+
+		var usar = caja.querySelector("[data-ah-demo-usar]");
+		if (usar) {
+			usar.addEventListener("click", function () {
+				var correo = caja.querySelector("[data-ah-demo-correo]");
+				var clave = caja.querySelector("[data-ah-demo-clave]");
+				var usuario = caja.querySelector("#username");
+				var contrasena = caja.querySelector("#password");
+				var formulario = caja.querySelector("form.woocommerce-form-login");
+				var enviar = formulario && formulario.querySelector("button[name='login']");
+				if (!correo || !clave || !usuario || !contrasena || !formulario) { return; }
+				mostrar("acceder", false);
+				usuario.value = correo.textContent.trim();
+				contrasena.value = clave.textContent.trim();
+				usar.disabled = true;
+				avisar("Entrando con la cuenta de prueba…");
+				// requestSubmit incluye el botón "login", que WooCommerce necesita para procesar el acceso.
+				if (formulario.requestSubmit && enviar) { formulario.requestSubmit(enviar); } else if (enviar) { enviar.click(); }
+			});
+		}
+	}
+
 	document.addEventListener("DOMContentLoaded", function () {
 		iniciarDesplegables();
 		iniciarMenu();
 		iniciarScroll();
 		iniciarRevelado();
 		iniciarFiltros();
+		iniciarAcceso();
 	});
 })();

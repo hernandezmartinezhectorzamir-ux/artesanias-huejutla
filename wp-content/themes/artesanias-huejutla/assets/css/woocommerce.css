@@ -223,6 +223,90 @@
 .woocommerce form.login, .woocommerce form.register { border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--blanco); padding: 1.8rem; margin: 0; }
 .woocommerce-account h2 { font-size: 1.6rem; }
 
+/* ---------- Acceso y registro (woocommerce/myaccount/form-login.php) ---------- */
+.ah-acceso { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); max-width: 1080px; margin: 0 auto; background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio-l); box-shadow: var(--sombra); overflow: hidden; }
+.ah-acceso__marca { position: relative; padding: 2.6rem 2.4rem 2.4rem; background: radial-gradient(120% 80% at 0% 0%, #5a3d2c 0%, var(--marron) 45%, var(--marron-oscuro) 100%); color: var(--beige); isolation: isolate; }
+.ah-acceso__marca::after { content: ""; position: absolute; inset: auto 0 0 0; height: 16px; background: var(--greca) repeat-x center / 32px 16px; opacity: .55; z-index: -1; }
+.ah-acceso__sello { width: 54px; height: 54px; color: var(--terracota); margin-bottom: 1.4rem; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .3)); }
+.ah-acceso__sello svg { width: 100%; height: 100%; }
+.ah-acceso__antetitulo { margin: 0 0 .5rem; font-size: .74rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--oro); }
+.ah-acceso__titulo { margin: 0 0 .8rem; font-family: var(--f-titulo); font-size: clamp(1.6rem, 2.6vw, 2.1rem); line-height: 1.15; color: var(--crema); }
+.ah-acceso__intro { margin: 0 0 1.6rem; font-size: .95rem; color: #d8c8af; }
+.ah-acceso__ventajas { list-style: none; margin: 0 0 1.8rem; padding: 0; display: grid; gap: .8rem; }
+.ah-acceso__ventajas li { display: flex; gap: .8rem; align-items: center; font-size: .92rem; color: var(--crema-2); }
+.ah-acceso__icono { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 50%; background: rgba(247, 241, 230, .1); color: var(--oro); }
+
+.ah-demo { position: relative; padding: 1.2rem 1.2rem 1.1rem; border: 1px dashed rgba(200, 144, 46, .65); border-radius: var(--radio); background: rgba(42, 29, 22, .45); }
+.ah-demo__cabecera { display: flex; align-items: center; gap: .6rem; margin-bottom: .4rem; }
+.ah-demo__icono { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--oro); color: var(--marron-oscuro); }
+.ah-demo__titulo { margin: 0; font-weight: 800; color: var(--crema); }
+.ah-demo__etiqueta { margin-left: auto; padding: .15rem .6rem; border-radius: 999px; background: rgba(200, 144, 46, .18); color: var(--oro); font-size: .7rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.ah-demo__nota { margin: 0 0 .9rem; font-size: .84rem; color: #d8c8af; }
+.ah-demo__datos { margin: 0 0 1rem; display: grid; gap: .5rem; }
+.ah-demo__datos > div { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: center; gap: .6rem; }
+.ah-demo__datos dt { font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #bfae94; }
+.ah-demo__datos dd { margin: 0; display: flex; align-items: center; gap: .4rem; min-width: 0; }
+.ah-demo__datos code { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: .35rem .6rem; border-radius: var(--radio-s); background: rgba(247, 241, 230, .08); color: var(--crema); font-size: .86rem; }
+.ah-demo__copiar { flex: 0 0 auto; display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: var(--radio-s); background: rgba(247, 241, 230, .1); color: var(--crema); cursor: pointer; transition: background var(--transicion), color var(--transicion); }
+.ah-demo__copiar:hover, .ah-demo__copiar:focus-visible { background: var(--oro); color: var(--marron-oscuro); }
+.ah-demo__copiar.is-copiado { background: var(--olivo); color: var(--blanco); }
+.ah-demo__usar { width: 100%; justify-content: center; }
+.ah-demo__aviso { margin: .6rem 0 0; min-height: 1.2em; font-size: .82rem; color: var(--oro); }
+
+.ah-acceso__panel { padding: 2.2rem 2.6rem 2rem; display: flex; flex-direction: column; }
+.ah-acceso__pestanas { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: .3rem; margin-bottom: 1.8rem; border-radius: 999px; background: var(--crema); border: 1px solid var(--borde); }
+.ah-acceso__pestanas button { position: relative; z-index: 1; padding: .7rem 1rem; border: 0; border-radius: 999px; background: transparent; color: var(--gris-suave); font: inherit; font-weight: 700; cursor: pointer; transition: color var(--transicion); }
+.ah-acceso__pestanas button[aria-selected="true"] { color: var(--crema); }
+.ah-acceso__pestanas button:focus-visible { outline: 3px solid var(--oro); outline-offset: 2px; }
+.ah-acceso__indicador { position: absolute; top: .3rem; bottom: .3rem; left: .3rem; width: calc(50% - .3rem); border-radius: 999px; background: var(--marron); box-shadow: var(--sombra-s); transition: transform var(--transicion); }
+.ah-acceso[data-activa="registro"] .ah-acceso__indicador { transform: translateX(100%); }
+.ah-acceso__seccion[hidden] { display: none; }
+.ah-acceso__seccion { animation: ah-acceso-entrada .35s ease both; }
+@keyframes ah-acceso-entrada { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.ah-acceso__subtitulo { margin: 0 0 .3rem; font-size: 1.55rem !important; color: var(--marron); }
+.ah-acceso__ayuda { margin: 0 0 1.3rem; font-size: .93rem; color: var(--gris-suave); }
+.woocommerce .ah-acceso form.login, .woocommerce .ah-acceso form.register { border: 0; padding: 0; background: none; }
+.ah-acceso .form-row { margin: 0 0 1.05rem; padding: 0; }
+.ah-acceso .form-row label { display: block; margin-bottom: .4rem; font-weight: 700; font-size: .9rem; color: var(--marron); }
+.ah-acceso .input-text { width: 100%; min-height: 50px; padding: .75rem 1rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--crema); font: inherit; transition: border-color var(--transicion), background var(--transicion), box-shadow var(--transicion); }
+.ah-acceso .input-text:focus { outline: 0; border-color: var(--terracota); background: var(--blanco); box-shadow: 0 0 0 4px rgba(181, 83, 47, .14); }
+.ah-acceso__fila { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin: -.2rem 0 1.3rem; font-size: .9rem; }
+.ah-acceso__fila label { display: inline-flex; align-items: center; gap: .45rem; margin: 0; cursor: pointer; }
+.ah-acceso__fila input[type="checkbox"] { accent-color: var(--terracota); width: 1rem; height: 1rem; }
+.ah-acceso__olvido { color: var(--terracota); font-weight: 600; }
+.woocommerce .ah-acceso button.ah-acceso__enviar { width: 100%; min-height: 52px; font-size: 1rem; }
+.ah-acceso__cambio { margin: 1.2rem 0 0; text-align: center; font-size: .92rem; color: var(--gris-suave); }
+.ah-acceso__enlace { padding: 0; border: 0; background: none; color: var(--terracota); font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.ah-acceso .woocommerce-privacy-policy-text { font-size: .84rem; color: var(--gris-suave); }
+.ah-acceso .woocommerce-privacy-policy-text p { margin: 0 0 1rem; }
+.ah-acceso__invitado { display: flex; gap: .6rem; align-items: center; margin: auto 0 0; padding-top: 1.6rem; border-top: 1px dashed var(--borde); font-size: .88rem; color: var(--gris-suave); }
+.ah-acceso__invitado svg { color: var(--olivo); flex-shrink: 0; }
+.ah-acceso__invitado a { color: var(--terracota); font-weight: 700; }
+.ah-acceso__seccion + .ah-acceso__invitado, .ah-acceso__seccion[hidden] + .ah-acceso__invitado { margin-top: 1.6rem; }
+@media (max-width: 860px) {
+	.ah-acceso { grid-template-columns: 1fr; }
+	.ah-acceso__panel { order: -1; padding: 1.6rem 1.25rem; }
+	.ah-acceso__marca { padding: 2rem 1.25rem 2.2rem; }
+	.ah-acceso__sello { display: none; }
+}
+.ah-contenido .ah-acceso h2 { margin-top: 0; }
+/* publico.css del plugin fuerza texto blanco en .ah-boton con !important. */
+.ah-acceso .ah-demo__usar, .ah-acceso .ah-demo__usar:visited { color: var(--marron) !important; font-weight: 800; }
+.ah-acceso .ah-demo__usar:hover { color: var(--terracota) !important; }
+.ah-acceso .ah-demo__usar:disabled { opacity: .75; cursor: progress; }
+.ah-acceso__atajo-demo { display: none; }
+@media (max-width: 860px) {
+	.ah-acceso__atajo-demo { display: flex; align-items: center; justify-content: center; gap: .45rem; margin: -.6rem 0 1.4rem; padding: .55rem .8rem; border: 1px dashed var(--oro); border-radius: var(--radio); background: #fbf4e6; color: var(--marron); font-size: .88rem; font-weight: 700; text-decoration: none; }
+	.ah-acceso__atajo-demo svg { color: var(--oro); }
+	.ah-demo__cabecera { flex-wrap: wrap; }
+	.ah-demo__etiqueta { margin-left: 0; }
+	.ah-demo__datos > div { grid-template-columns: 1fr; gap: .25rem; }
+	.ah-demo__datos code { white-space: normal; word-break: break-all; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.ah-acceso__seccion, .ah-acceso__indicador { animation: none; transition: none; }
+}
+
 /* ---------- Página de favoritos ---------- */
 .ah-favoritos__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
 .ah-favoritos__item { display: grid; grid-template-columns: 96px 1fr auto; gap: 1.2rem; align-items: center; padding: 1rem; background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio-l); }
