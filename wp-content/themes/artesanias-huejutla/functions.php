@@ -23,4 +23,5 @@ require_once AH_TEMA_DIR . '/inc/personalizador.php';
 
 if ( class_exists( 'WooCommerce' ) ) {
 	require_once AH_TEMA_DIR . '/inc/woocommerce.php';
+	require_once AH_TEMA_DIR . '/inc/checkout.php';
 }

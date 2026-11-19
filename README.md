@@ -119,10 +119,14 @@ artesanias-huejutla-wp/
 | Plugin | Uso | Origen |
 |---|---|---|
 | WooCommerce | Tienda, carrito, checkout, pedidos, inventario, envíos, pagos, cupones | wordpress.org |
+| Mercado Pago (oficial) | Tarjetas, OXXO, meses sin intereses y saldo de Mercado Pago. Instalado; la pasarela se activa al capturar credenciales | wordpress.org |
+| WooCommerce PayPal Payments (oficial) | PayPal y tarjetas mediante PayPal. Instalado; se activa al conectar la cuenta | wordpress.org |
 | Rank Math SEO | Títulos y descripciones, Schema.org, Open Graph, sitemap XML, SEO de imágenes, migas de pan | wordpress.org |
 | **Artesanías Huejutla – Gestión TI** | Desarrollo propio (este repositorio) | — |
 
-Pasarelas con tarjeta **preparadas, sin credenciales**: Mercado Pago, Stripe o PayPal se instalan desde Plugins y se configuran con las llaves reales de la cuenta del negocio. En pruebas solo están activos **transferencia (SPEI)** y **pago contra entrega**, que no procesan dinero ni piden datos de tarjeta.
+Pasarelas con tarjeta **instaladas y preparadas, sin credenciales**: Mercado Pago y PayPal Payments (plugins oficiales). Se activan en *WooCommerce → Ajustes → Pagos* con las credenciales **de prueba (sandbox)** de la cuenta del negocio para demostrar el flujo sin cobros, y con las de producción al lanzar. Mientras tanto solo están activos **transferencia (SPEI)** y **pago contra entrega**, que no procesan dinero ni piden datos de tarjeta.
+
+**Finalizar compra:** datos de envío → *Forma de entrega* en tarjetas con fecha estimada en días hábiles (envío a domicilio / recoger en taller, aviso de cuánto falta para el envío gratis) → *Medios de pago* en tarjetas; a la derecha, *Resumen de compra* fijo con miniaturas, envío, total, ahorro y botón **Pagar y finalizar** (ahí también se muestran los botones propios de PayPal). *Pedido recibido* muestra agradecimiento, etapas y datos del pedido.
 
 ## 7. Funcionalidades principales
 

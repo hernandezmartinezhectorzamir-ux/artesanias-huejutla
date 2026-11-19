@@ -93,6 +93,11 @@ final class AH_Tienda {
 		if ( 'production' === wp_get_environment_type() ) {
 			return;
 		}
-		echo '<p class="ah-aviso-demo">' . esc_html__( 'Entorno de pruebas: los pedidos usan métodos de pago fuera de línea (transferencia o contra entrega). No se procesan cobros ni se solicitan datos de tarjeta.', 'ah-gestion-ti' ) . '</p>';
+		$disponibles = function_exists( 'WC' ) && WC()->payment_gateways() ? array_keys( WC()->payment_gateways()->get_available_payment_gateways() ) : array();
+		$en_linea    = array_diff( $disponibles, array( 'bacs', 'cod', 'cheque' ) );
+		$texto       = $en_linea
+			? __( 'Entorno de pruebas: las pasarelas en línea deben usar credenciales y tarjetas de prueba (sandbox) de Mercado Pago o PayPal. No uses tarjetas reales.', 'ah-gestion-ti' )
+			: __( 'Entorno de pruebas: los pedidos usan métodos de pago fuera de línea (transferencia o contra entrega). No se procesan cobros ni se solicitan datos de tarjeta.', 'ah-gestion-ti' );
+		echo '<p class="ah-aviso-demo">' . esc_html( $texto ) . '</p>';
 	}
 }

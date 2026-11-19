@@ -465,3 +465,119 @@
 .ah-contenido .ah-escritorio ul, .ah-escritorio ul { margin: 0; padding: 0; list-style: none; }
 .ah-contenido .ah-escritorio ul > li, .ah-escritorio ul > li { margin: 0; padding: 0; }
 .ah-contenido .ah-escritorio ul > li::before, .ah-contenido .ah-escritorio ul > li::marker { content: none; }
+
+/* =========================================================
+   Finalizar compra (inc/checkout.php y woocommerce/checkout/*)
+   ========================================================= */
+.woocommerce-checkout form.checkout { grid-template-columns: minmax(0, 1fr) 400px; gap: 1.4rem 2.5rem; }
+.woocommerce-checkout form.checkout > * { grid-column: 1; }
+.woocommerce-checkout form.checkout > .woocommerce-NoticeGroup, .woocommerce-checkout form.checkout > .woocommerce-notices-wrapper { grid-column: 1 / -1; }
+.woocommerce-checkout form.checkout #customer_details { grid-column: 1; grid-row: auto; }
+.woocommerce-checkout form.checkout #order_review_heading { display: none; }
+.woocommerce-checkout form.checkout #order_review { grid-column: 2; grid-row: 1 / span 20; position: sticky; top: 120px; align-self: start; padding: 1.5rem 1.5rem 1.3rem; box-shadow: var(--sombra-s); }
+
+/* Paso 1: datos (las tarjetas de facturación/envío ya existen); se agrega el número. */
+.woocommerce-checkout #customer_details .woocommerce-billing-fields > h3 { display: flex; align-items: center; gap: .7rem; }
+.woocommerce-checkout #customer_details .woocommerce-billing-fields > h3::before { content: "1"; display: grid; place-items: center; flex: 0 0 30px; height: 30px; border-radius: 50%; background: var(--marron); color: var(--crema); font-family: var(--f-texto); font-size: .9rem; font-weight: 800; }
+
+/* Secciones 2 y 3 */
+.ah-checkout-seccion { padding: 1.6rem 1.7rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--blanco); }
+.ah-checkout-seccion__titulo { display: flex; align-items: center; gap: .7rem; margin: 0 0 1.1rem; font-size: 1.35rem; }
+.ah-checkout-seccion__paso { display: grid; place-items: center; flex: 0 0 30px; height: 30px; border-radius: 50%; background: var(--marron); color: var(--crema); font-family: var(--f-texto); font-size: .9rem; font-weight: 800; }
+
+/* Forma de entrega */
+.ah-entrega { display: grid; gap: 1.1rem; }
+.ah-entrega__gratis { padding: .8rem 1rem; border-radius: var(--radio); background: var(--olivo-claro); color: var(--olivo-oscuro); font-size: .9rem; }
+.ah-entrega__gratis p { margin: 0 0 .5rem; }
+.ah-entrega__barra { display: block; height: 6px; border-radius: 999px; background: rgba(84, 91, 51, .18); overflow: hidden; }
+.ah-entrega__barra span { display: block; height: 100%; border-radius: inherit; background: var(--olivo); }
+.ah-entrega__grupo { margin: 0; padding: 0; border: 0; display: grid; gap: .6rem; }
+.ah-entrega__grupo legend { display: flex; align-items: center; gap: .45rem; margin-bottom: .55rem; padding: 0; font-size: .8rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--gris-suave); }
+.ah-entrega__grupo legend svg { color: var(--terracota); }
+.ah-entrega__opcion { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: .9rem; align-items: center; padding: 1rem 1.1rem; border: 1.5px solid var(--borde); border-radius: var(--radio); background: var(--blanco); cursor: pointer; transition: border-color var(--transicion), background var(--transicion), box-shadow var(--transicion); }
+.ah-entrega__opcion:hover { border-color: var(--terracota); }
+.ah-entrega__opcion input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ah-entrega__radio { width: 20px; height: 20px; border: 2px solid var(--borde); border-radius: 50%; background: var(--blanco); transition: border-color var(--transicion), box-shadow var(--transicion); }
+.ah-entrega__opcion:has(input:checked), .ah-entrega__opcion.is-elegida { border-color: var(--terracota); background: #fdf6f2; box-shadow: 0 0 0 3px rgba(181, 83, 47, .1); }
+.ah-entrega__opcion input:checked + .ah-entrega__radio { border-color: var(--terracota); box-shadow: inset 0 0 0 4px var(--blanco); background: var(--terracota); }
+.ah-entrega__opcion input:focus-visible + .ah-entrega__radio { outline: 3px solid var(--oro); outline-offset: 2px; }
+.ah-entrega__texto strong { display: block; color: var(--marron); font-size: 1rem; }
+.ah-entrega__texto span { display: block; font-size: .86rem; color: var(--gris-suave); }
+.ah-entrega__precio { font-weight: 700; color: var(--marron); white-space: nowrap; }
+.ah-entrega__precio.is-gratis { color: var(--olivo-oscuro); }
+.ah-entrega__vacio { margin: 0; color: var(--gris-suave); }
+
+/* Medios de pago */
+.woocommerce-checkout .ah-checkout-seccion #payment { background: none; border-radius: 0; }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods { display: grid; gap: .6rem; margin: 0; padding: 0; border: 0; }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods > li { position: relative; margin: 0; padding: 0; border: 1.5px solid var(--borde); border-radius: var(--radio); background: var(--blanco); overflow: hidden; transition: border-color var(--transicion), box-shadow var(--transicion); }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods > li:hover { border-color: var(--terracota); }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods > li:has(> input:checked) { border-color: var(--terracota); box-shadow: 0 0 0 3px rgba(181, 83, 47, .1); }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods > li > input.input-radio { position: absolute; left: 1.15rem; top: 1.55rem; margin: 0; width: 18px; height: 18px; accent-color: var(--terracota); }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods > li > label { display: flex; align-items: center; gap: .8rem; margin: 0; padding: 1rem 1.1rem 1rem 3.2rem; font-weight: 700; color: var(--marron); cursor: pointer; min-height: 64px; }
+.woocommerce-checkout .ah-checkout-seccion #payment ul.payment_methods > li > label img { order: -1; max-height: 28px; width: auto; margin: 0 !important; float: none !important; }
+.ah-pago__icono { order: -1; display: grid; place-items: center; flex: 0 0 38px; height: 38px; border-radius: 50%; background: var(--crema); color: var(--terracota); }
+.woocommerce-checkout .ah-checkout-seccion #payment div.payment_box { margin: 0; padding: .9rem 1.1rem 1rem 3.2rem; border-radius: 0; background: var(--crema); color: var(--gris); font-size: .9rem; }
+.woocommerce-checkout .ah-checkout-seccion #payment div.payment_box::before { display: none; }
+.woocommerce-checkout .ah-checkout-seccion #payment div.payment_box p:last-child { margin-bottom: 0; }
+.ah-pago__seguro { display: flex; align-items: center; gap: .45rem; margin: .9rem 0 0; font-size: .82rem; color: var(--gris-suave); }
+.ah-pago__seguro svg { color: var(--olivo); }
+
+/* Resumen de compra */
+.woocommerce-checkout #order_review table.ah-resumen { margin: 0 0 1rem; border: 0; border-collapse: collapse; width: 100%; }
+.ah-resumen__titulo { caption-side: top; text-align: left; margin-bottom: 1rem; font-family: var(--f-titulo); font-size: 1.35rem; font-weight: 700; color: var(--marron); }
+.woocommerce-checkout #order_review table.ah-resumen td, .woocommerce-checkout #order_review table.ah-resumen th { padding: .55rem 0; border: 0; background: none; vertical-align: middle; }
+.woocommerce-checkout #order_review table.ah-resumen tbody td { padding: .6rem 0; border-bottom: 1px solid var(--crema-2); }
+.woocommerce-checkout #order_review table.ah-resumen .product-total, .woocommerce-checkout #order_review table.ah-resumen tfoot td { text-align: right; white-space: nowrap; }
+.ah-resumen__producto { display: flex; align-items: center; gap: .8rem; }
+.ah-resumen__miniatura { position: relative; flex: 0 0 56px; }
+.ah-resumen__miniatura img { width: 56px; height: 56px; object-fit: cover; border-radius: var(--radio-s); border: 1px solid var(--borde); }
+.ah-resumen__cantidad { position: absolute; top: -7px; right: -7px; display: grid; place-items: center; min-width: 22px; height: 22px; padding: 0 .3rem; border-radius: 999px; background: var(--marron); color: var(--crema); font-size: .72rem; font-weight: 800; }
+.ah-resumen__nombre { font-size: .92rem; line-height: 1.35; color: var(--gris); }
+.ah-resumen__nombre dl { margin: .2rem 0 0; font-size: .78rem; color: var(--gris-suave); }
+.woocommerce-checkout #order_review table.ah-resumen tfoot th { font-size: .95rem; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--gris); }
+.woocommerce-checkout #order_review table.ah-resumen tfoot tr.cart-subtotal th, .woocommerce-checkout #order_review table.ah-resumen tfoot tr.cart-subtotal td { padding-top: 1rem; }
+.ah-resumen__gratis { font-weight: 700; color: var(--olivo-oscuro); }
+.woocommerce-checkout #order_review table.ah-resumen tr.order-total th, .woocommerce-checkout #order_review table.ah-resumen tr.order-total td { padding-top: 1rem; border-top: 1px solid var(--borde); font-family: var(--f-titulo); font-size: 1.35rem; font-weight: 700; color: var(--marron); }
+.woocommerce-checkout #order_review table.ah-resumen tr.ah-resumen__beneficios td { padding-top: .1rem; text-align: right; }
+.ah-resumen__beneficios td > span { display: block; font-size: .88rem; font-weight: 700; color: var(--olivo-oscuro); }
+.ah-finalizar { margin: 0 !important; padding: 0 !important; }
+.ah-finalizar .woocommerce-terms-and-conditions-wrapper { font-size: .82rem; color: var(--gris-suave); }
+.ah-finalizar .woocommerce-privacy-policy-text p { margin: 0 0 .7rem; }
+.ah-finalizar .woocommerce-form__label-for-checkbox { display: flex; gap: .5rem; align-items: flex-start; font-size: .85rem; }
+.woocommerce-checkout #order_review .ah-finalizar #place_order { width: 100%; min-height: 56px; margin-top: .8rem; font-size: 1.05rem; float: none; }
+
+/* Pedido recibido */
+.woocommerce ul.order_details::before, .woocommerce ul.order_details::after { display: none !important; content: none !important; }
+.ah-gracias { display: grid; gap: 1.4rem; }
+.ah-gracias > p:empty { display: none; }
+.ah-gracias__encabezado { display: flex; align-items: center; gap: 1.2rem; margin: 0; padding: 1.5rem 1.7rem; border: 0; border-radius: var(--radio-l); background: var(--olivo-claro); color: var(--olivo-oscuro); }
+.ah-gracias__icono { display: grid; place-items: center; flex: 0 0 64px; height: 64px; border-radius: 50%; background: var(--olivo); color: var(--blanco); box-shadow: 0 0 0 6px rgba(107, 116, 66, .18); }
+.ah-contenido .ah-gracias__titulo, .ah-gracias__titulo { margin: 0 0 .25rem; font-size: clamp(1.4rem, 2.6vw, 1.85rem); color: var(--marron); }
+.ah-gracias__texto { margin: 0; font-size: .97rem; overflow-wrap: anywhere; }
+.ah-gracias__etapas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); counter-reset: none; }
+.ah-gracias__etapas li { position: relative; display: grid; justify-items: center; gap: .4rem; margin: 0; padding: 0 .3rem; text-align: center; font-size: .85rem; font-weight: 600; color: var(--gris-suave); }
+.ah-gracias__etapas li::before { content: ""; position: absolute; top: 20px; left: calc(-50% + 22px); right: calc(50% + 22px); height: 3px; border-radius: 999px; background: var(--borde); }
+.ah-gracias__etapas li:first-child::before { display: none; }
+.ah-gracias__etapa-icono { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--borde); background: var(--blanco); color: var(--gris-suave); }
+.ah-gracias__etapas li.is-hecha { color: var(--marron); }
+.ah-gracias__etapas li.is-hecha .ah-gracias__etapa-icono { border-color: var(--olivo); background: var(--olivo); color: var(--blanco); }
+.woocommerce ul.order_details.ah-gracias__datos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; margin: 0; padding: 0; list-style: none; }
+.woocommerce ul.order_details.ah-gracias__datos li { display: grid; gap: .25rem; margin: 0; padding: 1rem 1.1rem; border: 1px solid var(--borde) !important; border-radius: var(--radio); background: var(--blanco); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--gris-suave); min-width: 0; }
+.woocommerce ul.order_details.ah-gracias__datos li strong { font-size: 1.05rem; text-transform: none; letter-spacing: 0; color: var(--marron); overflow-wrap: anywhere; }
+.ah-gracias .woocommerce-bacs-bank-details, .ah-gracias section.woocommerce-order-details, .ah-gracias section.woocommerce-customer-details { padding: 1.4rem 1.6rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--blanco); }
+.ah-gracias .woocommerce-bacs-bank-details h2, .ah-gracias .woocommerce-order-details__title, .ah-gracias .woocommerce-column__title { margin-top: 0; font-size: 1.3rem; }
+
+@media (max-width: 1024px) {
+	.woocommerce-checkout form.checkout { grid-template-columns: minmax(0, 1fr); }
+	.woocommerce-checkout form.checkout #order_review { grid-column: 1; grid-row: auto; position: static; }
+}
+@media (max-width: 640px) {
+	.ah-checkout-seccion { padding: 1.2rem 1.05rem; }
+	.ah-entrega__opcion { grid-template-columns: auto minmax(0, 1fr); }
+	.ah-entrega__precio { grid-column: 2; }
+	.ah-gracias__encabezado { flex-direction: column; align-items: flex-start; }
+	.woocommerce ul.order_details.ah-gracias__datos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.ah-gracias__etapas li { font-size: .74rem; }
+}
+.ah-resumen__beneficios .woocommerce-Price-amount, .ah-resumen__beneficios bdi, .ah-entrega__gratis .woocommerce-Price-amount, .ah-entrega__gratis bdi { display: inline !important; white-space: nowrap; }
