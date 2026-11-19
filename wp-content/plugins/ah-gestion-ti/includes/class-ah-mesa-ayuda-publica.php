@@ -113,7 +113,7 @@ final class AH_Mesa_Ayuda_Publica {
 	 * Hoja de estilos mínima (el tema la complementa).
 	 */
 	public static function estilos() {
-		wp_register_style( 'ah-gti-publico', AH_GTI_URL . 'assets/css/publico.css', array(), AH_GTI_VERSION );
+		wp_register_style( 'ah-gti-publico', AH_GTI_URL . 'assets/css/publico.css', array(), ah_gti_version_archivo( 'assets/css/publico.css' ) );
 		global $post;
 		if ( is_account_page() || ( $post && ( has_shortcode( $post->post_content, 'ah_mesa_ayuda' ) || has_shortcode( $post->post_content, 'ah_formulario_contacto' ) || has_shortcode( $post->post_content, 'ah_catalogo_servicios' ) ) ) || is_post_type_archive( AH_Servicios::TIPO ) ) {
 			wp_enqueue_style( 'ah-gti-publico' );

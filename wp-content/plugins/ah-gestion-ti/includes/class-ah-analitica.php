@@ -103,7 +103,7 @@ final class AH_Analitica {
 		if ( ! self::medir() ) {
 			return;
 		}
-		wp_enqueue_script( 'ah-gti-ga4', AH_GTI_URL . 'assets/js/ga4.js', array( 'jquery' ), AH_GTI_VERSION, true );
+		wp_enqueue_script( 'ah-gti-ga4', AH_GTI_URL . 'assets/js/ga4.js', array( 'jquery' ), ah_gti_version_archivo( 'assets/js/ga4.js' ), true );
 		wp_localize_script( 'ah-gti-ga4', 'ahGa4', array( 'moneda' => function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'MXN' ) );
 	}
 

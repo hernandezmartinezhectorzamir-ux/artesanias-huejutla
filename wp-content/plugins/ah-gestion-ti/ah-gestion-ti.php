@@ -102,3 +102,15 @@ function ah_gti_whatsapp_url( $mensaje = '' ) {
 	$texto = $mensaje ? $mensaje : ah_gti_opcion( 'whatsapp_mensaje', 'Hola, me interesa una artesanía de Huejutla.' );
 	return 'https://wa.me/' . $numero . '?text=' . rawurlencode( $texto );
 }
+
+/**
+ * Versión de un recurso según su fecha de modificación, para que el navegador
+ * descargue la copia nueva en cuanto cambia el archivo.
+ *
+ * @param string $ruta Ruta relativa a la carpeta del plugin.
+ * @return string
+ */
+function ah_gti_version_archivo( $ruta ) {
+	$archivo = AH_GTI_DIR . ltrim( $ruta, '/' );
+	return AH_GTI_VERSION . ( file_exists( $archivo ) ? '.' . filemtime( $archivo ) : '' );
+}

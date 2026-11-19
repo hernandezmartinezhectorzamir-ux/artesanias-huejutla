@@ -22,6 +22,9 @@
 .ah-boton--secundario { background: var(--ah-o); }
 .ah-boton--secundario:hover { background: var(--olivo-oscuro, #545b33); }
 .ah-boton--texto { background: none; color: var(--ah-c) !important; padding-inline: .3rem; }
+/* Variante clara del tema (fondo crema): el texto debe ser oscuro, no blanco. */
+.ah-boton.ah-boton--claro { background: var(--crema, #f7f1e6); color: var(--marron, #3f2b21) !important; }
+.ah-boton.ah-boton--claro:hover { background: var(--blanco, #fff); color: var(--terracota, #b5532f) !important; }
 .ah-boton--texto:hover { background: none; text-decoration: underline; }
 .ah-boton--whatsapp { background: #1f8f4e; }
 .ah-boton--whatsapp:hover { background: #17713d; }

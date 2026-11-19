@@ -34,7 +34,7 @@ final class AH_Mesa_Ayuda_Admin {
 	 */
 	public static function estilos( $hook ) {
 		if ( false !== strpos( $hook, 'ah-' ) || false !== strpos( $hook, 'ah_' ) ) {
-			wp_enqueue_style( 'ah-gti-admin', AH_GTI_URL . 'assets/css/admin.css', array(), AH_GTI_VERSION );
+			wp_enqueue_style( 'ah-gti-admin', AH_GTI_URL . 'assets/css/admin.css', array(), ah_gti_version_archivo( 'assets/css/admin.css' ) );
 		}
 	}
 

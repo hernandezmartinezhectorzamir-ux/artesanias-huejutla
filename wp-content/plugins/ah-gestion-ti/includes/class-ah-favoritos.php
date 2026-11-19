@@ -90,7 +90,7 @@ final class AH_Favoritos {
 	 * Script de favoritos.
 	 */
 	public static function script() {
-		wp_enqueue_script( 'ah-gti-favoritos', AH_GTI_URL . 'assets/js/favoritos.js', array(), AH_GTI_VERSION, true );
+		wp_enqueue_script( 'ah-gti-favoritos', AH_GTI_URL . 'assets/js/favoritos.js', array(), ah_gti_version_archivo( 'assets/js/favoritos.js' ), true );
 		$pagina = (int) get_option( 'ah_gti_pagina_favoritos' );
 		wp_localize_script(
 			'ah-gti-favoritos',
