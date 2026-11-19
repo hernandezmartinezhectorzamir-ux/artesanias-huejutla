@@ -43,6 +43,7 @@ define( 'WP_DEBUG_DISPLAY', false );
 
 // WP-Cron real del sistema: */5 * * * * wp cron event run --due-now --path=/var/www/artesanias
 define( 'DISABLE_WP_CRON', true );
+// Correo saliente por SMTP (Brevo, Mailjet, Gmail Workspace, el del hosting...). Lo usa el plugin// ah-gestion-ti (class-ah-correo.php). Las credenciales vienen del entorno, nunca del repositorio.// Ejemplo con Brevo: AH_SMTP_HOST=smtp-relay.brevo.com, AH_SMTP_PORT=587, AH_SMTP_SECURE=tls.define( 'AH_SMTP_HOST', $ah_env( 'AH_SMTP_HOST' ) );define( 'AH_SMTP_PORT', (int) $ah_env( 'AH_SMTP_PORT', '587' ) );define( 'AH_SMTP_SECURE', $ah_env( 'AH_SMTP_SECURE', 'tls' ) );define( 'AH_SMTP_USER', $ah_env( 'AH_SMTP_USER' ) );define( 'AH_SMTP_PASS', $ah_env( 'AH_SMTP_PASS' ) );define( 'AH_SMTP_FROM', $ah_env( 'AH_SMTP_FROM' ) );           // Remitente verificado en el servicio de correo.define( 'AH_SMTP_FROM_NAME', $ah_env( 'AH_SMTP_FROM_NAME', 'Artesanías Huejutla' ) );// No definir AH_CORREO_LOCAL en producción: esa constante solo guarda los correos en una bandeja local.
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . '/' );

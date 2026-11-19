@@ -536,7 +536,7 @@ final class AH_Boletin {
 						<td><?php echo esc_html( $fila->origen ); ?></td>
 						<td><?php echo esc_html( $fila->creado ); ?></td>
 						<td><?php echo esc_html( $fila->confirmado ? $fila->confirmado : '—' ); ?></td>
-						<td><?php echo $fila->correo_enviado ? esc_html__( 'Aceptado por el servidor', 'ah-gestion-ti' ) : '<span style="color:#b32d2e">' . esc_html__( 'No se pudo enviar', 'ah-gestion-ti' ) . '</span>'; ?></td>
+						<td><?php echo $fila->correo_enviado ? ( AH_Correo::modo_local() ? esc_html__( 'En la bandeja local (no enviado)', 'ah-gestion-ti' ) : esc_html__( 'Aceptado por el servidor', 'ah-gestion-ti' ) ) : '<span style="color:#b32d2e">' . esc_html__( 'No se pudo enviar', 'ah-gestion-ti' ) . '</span>'; ?></td>
 						<td>
 							<?php if ( 'pendiente' === $fila->estado ) : ?>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">

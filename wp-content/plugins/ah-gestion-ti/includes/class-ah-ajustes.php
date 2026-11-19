@@ -141,6 +141,16 @@ final class AH_Ajustes {
 					),
 				),
 			),
+			'cuentas'      => array(
+				'titulo'      => __( 'Cuentas de clientes', 'ah-gestion-ti' ),
+				'descripcion' => __( 'Con la verificación activa, quien crea una cuenta recibe un correo con un enlace y no puede iniciar sesión hasta confirmarlo. Requiere que el sitio envíe correos (SMTP en el hosting). Las cuentas creadas antes de activarla no se ven afectadas.', 'ah-gestion-ti' ),
+				'campos'      => array(
+					'verificar_correo' => array(
+						'etiqueta' => __( 'Exigir confirmación del correo al crear una cuenta', 'ah-gestion-ti' ),
+						'tipo'     => 'checkbox',
+					),
+				),
+			),
 			'demo'         => array(
 				'titulo'      => __( 'Cuenta de prueba en la pantalla de acceso', 'ah-gestion-ti' ),
 				'descripcion' => __( 'Muestra a los visitantes un correo y una contraseña de una cuenta de CLIENTE para revisar el sitio (por ejemplo, durante la evaluación). Solo se aceptan cuentas con rol de cliente: nunca una cuenta de administrador o del personal. Desactívela cuando la tienda opere con clientes reales.', 'ah-gestion-ti' ),

@@ -121,6 +121,16 @@ final class AH_Tablero {
 				'enlace' => admin_url( 'options-general.php?page=wpsupercache' ),
 			),
 			array(
+				'ok'     => 'smtp' === AH_Correo::estado(),
+				'texto'  => 'Envío de correo por SMTP (confirmaciones de cuenta, boletín y pedidos)',
+				'ayuda'  => array(
+					'smtp'     => 'SMTP configurado en wp-config.php.',
+					'local'    => 'Modo local: los correos se guardan en Gestión TI → Correos (local) y no se envían. En el hosting quite AH_CORREO_LOCAL y defina AH_SMTP_*.',
+					'servidor' => 'Sin SMTP: se usa mail() del servidor, que suele no entregar. Defina AH_SMTP_* en wp-config.php.',
+				)[ AH_Correo::estado() ],
+				'enlace' => AH_Correo::modo_local() ? admin_url( 'admin.php?page=' . AH_Correo::PAGINA ) : admin_url( 'admin.php?page=ah-gestion-ti' ),
+			),
+			array(
 				'ok'     => (bool) wp_next_scheduled( AH_Monitoreo::EVENTO_CRON ),
 				'texto'  => 'Chequeo de disponibilidad programado',
 				'ayuda'  => 'WP-Cron cada hora. En producción, use un cron real del sistema.',

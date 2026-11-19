@@ -39,6 +39,8 @@ require_once AH_GTI_DIR . 'includes/class-ah-tablero.php';
 require_once AH_GTI_DIR . 'includes/class-ah-tienda.php';
 require_once AH_GTI_DIR . 'includes/class-ah-mis-compras.php';
 require_once AH_GTI_DIR . 'includes/class-ah-boletin.php';
+require_once AH_GTI_DIR . 'includes/class-ah-correo.php';
+require_once AH_GTI_DIR . 'includes/class-ah-verificacion.php';
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	require_once AH_GTI_DIR . 'includes/class-ah-cli.php';
@@ -66,6 +68,8 @@ add_action(
 		AH_Tienda::iniciar();
 		AH_Mis_Compras::iniciar();
 		AH_Boletin::iniciar();
+		AH_Correo::iniciar();
+		AH_Verificacion::iniciar();
 	}
 );
 

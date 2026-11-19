@@ -308,4 +308,15 @@ final class AH_Calculos {
 		$valor = (string) $valor;
 		return '' !== $valor && in_array( $valor[0], array( '=', '+', '-', '@', "\t", "\r" ), true ) ? "'" . $valor : $valor;
 	}
+
+	/**
+	 * ¿El enlace de verificación sigue vigente?
+	 *
+	 * @param int $vence Timestamp de vencimiento (0 = sin fecha, no vigente).
+	 * @param int $ahora Timestamp actual.
+	 * @return bool
+	 */
+	public static function verificacion_vigente( $vence, $ahora ) {
+		return (int) $vence > 0 && (int) $ahora <= (int) $vence;
+	}
 }

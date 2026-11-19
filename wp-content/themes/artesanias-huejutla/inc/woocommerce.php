@@ -221,3 +221,20 @@ add_action(
 	},
 	1
 );
+
+/*
+ * ---------- Cerrar sesión desde la tienda ----------
+ * wc_logout_url() usa wp-login.php; si su clave (nonce) caducó —pestaña antigua o página
+ * guardada por el navegador— WordPress muestra una pantalla gris sin el diseño del sitio.
+ * Fuera del panel se usa el punto de salida de WooCommerce: con clave válida cierra la sesión
+ * y, si caducó, vuelve a Mi cuenta con el aviso "¿Seguro que quieres salir? Confirmar y salir".
+ */
+add_filter(
+	'logout_url',
+	static function ( $url ) {
+		if ( is_admin() || ! function_exists( 'wc_get_account_endpoint_url' ) || ! get_option( 'woocommerce_logout_endpoint' ) ) {
+			return $url;
+		}
+		return wp_nonce_url( wc_get_account_endpoint_url( 'customer-logout' ), 'customer-logout' );
+	}
+);

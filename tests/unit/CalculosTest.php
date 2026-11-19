@@ -113,4 +113,12 @@ final class CalculosTest extends TestCase {
 		$this->assertSame( 'cliente@example.com', AH_Calculos::csv_seguro( 'cliente@example.com' ) );
 		$this->assertSame( '', AH_Calculos::csv_seguro( '' ) );
 	}
+
+	public function test_vigencia_del_enlace_de_verificacion() {
+		$ahora = 1_800_000_000;
+		$this->assertTrue( AH_Calculos::verificacion_vigente( $ahora + 3600, $ahora ) );
+		$this->assertTrue( AH_Calculos::verificacion_vigente( $ahora, $ahora ) );
+		$this->assertFalse( AH_Calculos::verificacion_vigente( $ahora - 1, $ahora ) );
+		$this->assertFalse( AH_Calculos::verificacion_vigente( 0, $ahora ) );
+	}
 }
