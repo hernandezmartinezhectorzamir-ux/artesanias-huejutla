@@ -67,7 +67,7 @@ return array(
 			'<p>Resolvemos las dudas más comunes sobre nuestras artesanías, envíos y pagos. Si no encuentras tu respuesta, abre un ticket en la <a href="{{pagina:mesa-de-ayuda}}">mesa de ayuda</a>.</p>
 [ah_faq]
 ¿Las artesanías son realmente hechas a mano? || Sí. Todas las piezas son elaboradas a mano por artesanos de Huejutla y sus comunidades; por eso cada una puede tener pequeñas variaciones que la hacen única.
-¿Hacen envíos a todo México? || Sí. El envío estándar tarda de 3 a 7 días hábiles y es gratis en compras desde $999 MXN. También hay envío express y la opción de recoger en el taller en Huejutla.
+¿Hacen envíos a todo México? || Sí. El envío estándar tarda de 3 a 7 días hábiles y es gratis en compras desde $299 MXN. También hay envío express y la opción de recoger en el taller en Huejutla.
 ¿Qué formas de pago aceptan? || Por ahora transferencia bancaria y pago contra entrega. Las pasarelas de pago con tarjeta se habilitarán al concluir su configuración segura.
 ¿Puedo cambiar o devolver una pieza? || Sí, dentro de los 15 días naturales posteriores a la entrega si la pieza llega dañada o no corresponde a tu pedido. Consulta la política de envíos y devoluciones.
 ¿Cómo doy seguimiento a mi pedido? || Desde Mi cuenta → Pedidos. Si tienes un problema, crea un ticket en la mesa de ayuda y recibirás un número de seguimiento.
@@ -110,7 +110,7 @@ return array(
 			'<h2>Envíos</h2>
 <ul>
 <li><strong>Cobertura:</strong> enviamos a toda la República Mexicana.</li>
-<li><strong>Envío estándar:</strong> 3 a 7 días hábiles. Gratis en compras desde $999 MXN.</li>
+<li><strong>Envío estándar:</strong> 3 a 7 días hábiles. Gratis en compras desde $299 MXN.</li>
 <li><strong>Envío express:</strong> 1 a 3 días hábiles.</li>
 <li><strong>Recoger en taller:</strong> sin costo en Huejutla de Reyes, Hidalgo.</li>
 <li>Los tiempos corren a partir de la confirmación del pago.</li>
@@ -126,7 +126,7 @@ return array(
 </ul>',
 			'',
 			'Envíos y devoluciones | Artesanías Huejutla',
-			'Conoce costos y tiempos de envío a todo México, envío gratis desde $999 y cómo solicitar cambios o devoluciones de tus artesanías.',
+			'Conoce costos y tiempos de envío a todo México, envío gratis desde $299 y cómo solicitar cambios o devoluciones de tus artesanías.',
 			'envíos artesanías México',
 		),
 		'terminos-y-condiciones'    => array(

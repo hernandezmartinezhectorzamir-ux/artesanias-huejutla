@@ -45,11 +45,39 @@ add_filter(
 				unset( $tarifas[ $id ] );
 			}
 		}
+		// El envío gratis va primero.
+		uasort( $tarifas, static fn( $a, $b ) => ( 'free_shipping' === $b->get_method_id() ) <=> ( 'free_shipping' === $a->get_method_id() ) );
 		return $tarifas;
 	},
 	20
 );
 
+
+/*
+ * Si la opción elegida deja de existir (p. ej. el estándar con costo al alcanzar el envío gratis),
+ * WooCommerce tomaría la primera disponible, que puede ser express. Se elige el envío gratis o,
+ * si no hay, la entrega a domicilio más barata: nunca se sube el costo sin que el cliente lo pida.
+ */
+add_filter(
+	'woocommerce_shipping_chosen_method',
+	static function ( $por_defecto, $tarifas, $elegido = '' ) {
+		if ( $elegido && isset( $tarifas[ $elegido ] ) ) {
+			return $por_defecto;
+		}
+		$mejor = null;
+		foreach ( $tarifas as $id => $tarifa ) {
+			if ( 'free_shipping' === $tarifa->get_method_id() ) {
+				return $id;
+			}
+			if ( 'recoger' !== ah_checkout_tipo_envio( $tarifa ) && ( null === $mejor || (float) $tarifa->get_cost() < (float) $tarifas[ $mejor ]->get_cost() ) ) {
+				$mejor = $id;
+			}
+		}
+		return $mejor ? $mejor : $por_defecto;
+	},
+	10,
+	3
+);
 /* Íconos para los métodos fuera de línea (las pasarelas traen el suyo). */
 add_filter(
 	'woocommerce_gateway_icon',

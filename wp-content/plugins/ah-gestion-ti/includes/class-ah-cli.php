@@ -233,7 +233,7 @@ class AH_CLI {
 				array(
 					'title'            => 'Envío estándar gratis',
 					'requires'         => 'either',
-					'min_amount'       => '999',
+					'min_amount'       => '299',
 					'ignore_discounts' => 'no',
 				),
 			),
@@ -251,7 +251,7 @@ class AH_CLI {
 			$opcion    = 'woocommerce_' . $tipo . '_' . $instancia . '_settings';
 			update_option( $opcion, array_merge( (array) get_option( $opcion, array() ), $ajustes ) );
 		}
-		WP_CLI::log( '✔ Envíos: estándar $120, express $220, gratis desde $999, recoger en taller' );
+		WP_CLI::log( '✔ Envíos: estándar $120, express $220, gratis desde $299, recoger en taller' );
 	}
 
 	/**

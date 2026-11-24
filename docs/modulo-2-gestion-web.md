@@ -23,13 +23,13 @@
 | SKU | Producto | Precio actual | Categoría |
 |---|---|---|---|
 | AH-001 | Tazón Huasteco Decorado | **$109** (antes $129) | Decoración tradicional |
-| AH-002 | Rebozo Tenango Bordado | **$599** | Textiles bordados |
+| AH-002 | Rebozo Tenango Bordado | **$499** (antes $599) | Textiles bordados |
 | AH-003 | Cesta de Palma con Tapa | **$89** | Cestería de palma |
 | AH-004 | Canasta de Palma Tejida | **$189** (antes $219) | Canastas artesanales |
-| AH-005 | Bolsa Artesanal de Palma | **$239** | Accesorios artesanales |
+| AH-005 | Bolsa Artesanal de Palma | **$199** (antes $239) | Accesorios artesanales |
 | AH-006 | Mantel Bordado a Mano | **$339** (antes $389) | Textiles bordados |
 
-Además hay 21 productos complementarios (AH-007 a AH-027, de $59 a $549) para que todas las categorías tengan varias piezas, incluido uno **agotado** para mostrar ese estado. Cada producto tiene descripción corta y larga, cuidados, atributos visibles (**Materiales, Lugar de elaboración, Medidas**), galería, existencias y SEO propio. El catálogo se sincroniza con `wp ah productos`, que crea los productos nuevos y actualiza precios y textos sin tocar las existencias.
+Además hay 21 productos complementarios (AH-007 a AH-027, de $59 a $549; 15 de los 27 productos tienen descuento) para que todas las categorías tengan varias piezas, incluido uno **agotado** para mostrar ese estado. Cada producto tiene descripción corta y larga, cuidados, atributos visibles (**Materiales, Lugar de elaboración, Medidas**), galería, existencias y SEO propio. El catálogo se sincroniza con `wp ah productos`, que crea los productos nuevos y actualiza precios y textos sin tocar las existencias.
 
 ### 1.3 Operación desde el administrador
 
@@ -42,7 +42,7 @@ Además hay 21 productos complementarios (AH-007 a AH-027, de $59 a $549) para q
 | Descuentos | Marketing → Cupones (`HUASTECA10` 10 %, `ENVIOGRATIS`, `ARTESANO50` $50 desde $500) |
 | Pedidos y estados | WooCommerce → Pedidos (Pendiente, Procesando, En espera, Completado, Cancelado, Reembolsado) |
 | Clientes | WooCommerce → Clientes |
-| Envíos | WooCommerce → Ajustes → Envío → zona **México**: estándar $120 (3–7 días), express $220 (1–3 días), **gratis desde $999**, recoger en taller (sin costo) |
+| Envíos | WooCommerce → Ajustes → Envío → zona **México**: estándar $120 (3–7 días), express $220 (1–3 días), **gratis desde $299**, recoger en taller (sin costo) |
 | Pagos | WooCommerce → Ajustes → Pagos |
 
 ### 1.4 Métodos de pago
