@@ -60,6 +60,34 @@ class AH_CLI {
 	}
 
 	/**
+	 * Sincroniza solo el catálogo (imágenes, categorías y productos) con datos-demo/contenido.php.
+	 *
+	 * Crea los productos nuevos y actualiza nombre, precios, descripciones e imágenes de los
+	 * existentes, sin tocar sus existencias (ventas reales), páginas ni ajustes.
+	 *
+	 * ## EJEMPLOS
+	 *
+	 *     wp ah productos
+	 *
+	 * @subcommand productos
+	 *
+	 * @when after_wp_load
+	 */
+	public function productos_cmd() {
+		if ( ! class_exists( 'WooCommerce' ) ) {
+			WP_CLI::error( 'WooCommerce debe estar activo.' );
+		}
+		$contenido = require AH_GTI_DIR . 'datos-demo/contenido.php';
+		$this->importar_imagenes( $contenido['imagenes'] );
+		$categorias = $this->categorias( $contenido['categorias'] );
+		$this->productos( $contenido['productos'], $categorias, true );
+		if ( function_exists( 'wc_delete_product_transients' ) ) {
+			wc_delete_product_transients();
+		}
+		WP_CLI::success( 'Catálogo sincronizado (existencias conservadas).' );
+	}
+
+	/**
 	 * Ejecuta un chequeo de disponibilidad real.
 	 *
 	 * @when after_wp_load
@@ -354,8 +382,9 @@ class AH_CLI {
 	 *
 	 * @param array             $productos  Definición.
 	 * @param array<string,int> $categorias Categorías.
+	 * @param bool              $conservar_existencias Si el producto ya existe, no cambia sus existencias.
 	 */
-	private function productos( array $productos, array $categorias ) {
+	private function productos( array $productos, array $categorias, $conservar_existencias = false ) {
 		$creados = 0;
 		foreach ( $productos as $orden => $p ) {
 			list( $sku, $nombre, $slug, $categoria, $precio, $oferta, $stock, $destacado, $imagenes, $corta, $larga, $materiales, $origen, $medidas, $clave ) = $p;
@@ -372,7 +401,9 @@ class AH_CLI {
 			$producto->set_regular_price( (string) $precio );
 			$producto->set_sale_price( $oferta ? (string) $oferta : '' );
 			$producto->set_manage_stock( true );
-			$producto->set_stock_quantity( $stock );
+			if ( ! ( $id && $conservar_existencias ) ) {
+				$producto->set_stock_quantity( $stock );
+			}
 			$producto->set_low_stock_amount( 3 );
 			$producto->set_backorders( 'no' );
 			$producto->set_short_description( $corta );

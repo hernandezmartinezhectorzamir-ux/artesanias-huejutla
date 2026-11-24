@@ -18,18 +18,18 @@
 
 **Categorías:** Cestería de palma · Textiles bordados · Canastas artesanales · Decoración tradicional · Accesorios artesanales · Regalos mexicanos. Cada una tiene imagen, descripción y SEO propio.
 
-**Productos de la especificación:**
+**Productos de la especificación** (precios rebajados el 24/11/2026 a petición del equipo; la especificación original listaba tazón $150 antes $180, rebozo $850, cesta $120, canasta $250 antes $290, bolsa $320 y mantel $450 antes $520):
 
-| SKU | Producto | Precio | Categoría |
+| SKU | Producto | Precio actual | Categoría |
 |---|---|---|---|
-| AH-001 | Tazón Huasteco Decorado | **$150** (antes $180) | Decoración tradicional |
-| AH-002 | Rebozo Tenango Bordado | **$850** | Textiles bordados |
-| AH-003 | Cesta de Palma con Tapa | **$120** | Cestería de palma |
-| AH-004 | Canasta de Palma Tejida | **$250** (antes $290) | Canastas artesanales |
-| AH-005 | Bolsa Artesanal de Palma | **$320** | Accesorios artesanales |
-| AH-006 | Mantel Bordado a Mano | **$450** (antes $520) | Textiles bordados |
+| AH-001 | Tazón Huasteco Decorado | **$109** (antes $129) | Decoración tradicional |
+| AH-002 | Rebozo Tenango Bordado | **$599** | Textiles bordados |
+| AH-003 | Cesta de Palma con Tapa | **$89** | Cestería de palma |
+| AH-004 | Canasta de Palma Tejida | **$189** (antes $219) | Canastas artesanales |
+| AH-005 | Bolsa Artesanal de Palma | **$239** | Accesorios artesanales |
+| AH-006 | Mantel Bordado a Mano | **$339** (antes $389) | Textiles bordados |
 
-Además hay 9 productos complementarios (AH-007 a AH-015) para que todas las categorías tengan contenido, incluido uno **agotado** para mostrar ese estado. Cada producto tiene descripción corta y larga, cuidados, atributos visibles (**Materiales, Lugar de elaboración, Medidas**), galería, existencias y SEO propio.
+Además hay 21 productos complementarios (AH-007 a AH-027, de $59 a $549) para que todas las categorías tengan varias piezas, incluido uno **agotado** para mostrar ese estado. Cada producto tiene descripción corta y larga, cuidados, atributos visibles (**Materiales, Lugar de elaboración, Medidas**), galería, existencias y SEO propio. El catálogo se sincroniza con `wp ah productos`, que crea los productos nuevos y actualiza precios y textos sin tocar las existencias.
 
 ### 1.3 Operación desde el administrador
 

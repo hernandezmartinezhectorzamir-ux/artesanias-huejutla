@@ -7,7 +7,7 @@ Proyecto de la materia **Gestiones Tecnológicas Empresariales**, de la carrera 
 | Módulo | Qué se implementó | Documento |
 |---|---|---|
 | 1. Marketing digital (SEO/SEM) | SEO on-page con Rank Math, Schema.org, Open Graph, sitemap dinámico, robots.txt, imágenes WebP con ALT/TITLE, video SEO y campaña SEM simulada | [docs/modulo-1-marketing-seo-sem.md](docs/modulo-1-marketing-seo-sem.md) |
-| 2. Gestión web | WordPress/WooCommerce configurados, 15 productos, 6 categorías, envíos, pagos, cupones, blog, GA4 (eventos de comercio electrónico), Search Console, redes sociales y videoconferencia | [docs/modulo-2-gestion-web.md](docs/modulo-2-gestion-web.md) |
+| 2. Gestión web | WordPress/WooCommerce configurados, 27 productos, 6 categorías, envíos, pagos, cupones, blog, GA4 (eventos de comercio electrónico), Search Console, redes sociales y videoconferencia | [docs/modulo-2-gestion-web.md](docs/modulo-2-gestion-web.md) |
 | 3. DevOps | Git (flujo main/develop/feature), CI/CD con GitHub Actions, PHPCS, PHPUnit, prueba de humo, despliegue con respaldo, monitoreo y métricas | [docs/modulo-3-devops.md](docs/modulo-3-devops.md) |
 | 4. ITIL | Catálogo de servicios, mesa de ayuda con flujo ITIL (7 etapas, SLA y matriz de prioridad), permisos y mejora continua PDCA | [docs/modulo-4-itil.md](docs/modulo-4-itil.md) |
 
@@ -85,6 +85,7 @@ artesanias-huejutla-wp/
    wp theme activate artesanias-huejutla
    wp plugin activate ah-gestion-ti
    wp ah sembrar          # configura WooCommerce y Rank Math y carga el contenido inicial (idempotente)
+   wp ah productos        # sincroniza solo el catálogo (crea productos y actualiza precios) sin tocar existencias
    wp rewrite structure '/%postname%/'
    ```
 6. Abre `http://localhost/artesanias-wp/`. La administración está en `/wp-admin/` → menú **Gestión TI**.
