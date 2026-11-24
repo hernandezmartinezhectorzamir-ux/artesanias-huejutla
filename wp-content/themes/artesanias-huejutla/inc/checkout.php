@@ -222,7 +222,13 @@ function ah_checkout_seccion_pago() {
 	$paso = WC()->cart && WC()->cart->needs_shipping() ? '3' : '2';
 	echo '<section class="ah-checkout-seccion ah-checkout-seccion--pago" aria-labelledby="ah-pago-titulo"><h3 id="ah-pago-titulo" class="ah-checkout-seccion__titulo"><span class="ah-checkout-seccion__paso" aria-hidden="true">' . esc_html( $paso ) . '</span>' . esc_html__( 'Medios de pago', 'artesanias-huejutla' ) . '</h3>';
 	woocommerce_checkout_payment();
-	echo '<p class="ah-pago__seguro">' . ah_tema_icono( 'escudo', 16 ) . esc_html__( 'Pago protegido. No guardamos los datos de tu tarjeta.', 'artesanias-huejutla' ) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	// Con solo métodos fuera de línea se dice explícitamente que no se pide tarjeta.
+	$disponibles = array_keys( WC()->payment_gateways() ? WC()->payment_gateways()->get_available_payment_gateways() : array() );
+	$con_tarjeta = (bool) array_diff( $disponibles, array( 'bacs', 'cod', 'cheque' ) );
+	$texto       = $con_tarjeta
+		? __( 'Pago protegido. No guardamos los datos de tu tarjeta.', 'artesanias-huejutla' )
+		: __( 'Esta tienda no te pedirá datos de tarjeta: pagas por transferencia o al recibir tu pedido.', 'artesanias-huejutla' );
+	echo '<p class="ah-pago__seguro">' . ah_tema_icono( 'escudo', 16 ) . esc_html( $texto ) . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	echo '</section>';
 }
 

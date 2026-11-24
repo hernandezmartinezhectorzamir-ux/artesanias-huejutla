@@ -11,7 +11,7 @@ Supabase ofrece **PostgreSQL**. WordPress y WooCommerce solo funcionan con **MyS
 | Parte | Cómo llega al hosting | Archivos |
 |---|---|---|
 | WordPress | Instalador automático del panel (Softaculous) | se instala en el servidor |
-| WooCommerce, Rank Math, WP Super Cache, Mercado Pago, PayPal | *Plugins → Añadir nuevo* en el escritorio de WordPress | se descargan en el servidor |
+| WooCommerce, Rank Math, WP Super Cache,  | *Plugins → Añadir nuevo* en el escritorio de WordPress | se descargan en el servidor |
 | Tema `artesanias-huejutla` y plugin `ah-gestion-ti` | FTP (FileZilla) la primera vez; después, GitHub Actions en cada cambio | ~100 |
 | Medios (`wp-content/uploads`) | FTP | ~135 |
 | Base de datos | `scripts/preparar-migracion.sh` + importar en phpMyAdmin | 1 archivo .sql (~1.2 MB) |
@@ -33,7 +33,7 @@ Supabase ofrece **PostgreSQL**. WordPress y WooCommerce solo funcionan con **MyS
 ### 3. WordPress y plugins
 
 1. Panel de control → **Softaculous** → WordPress → instala en la carpeta raíz del dominio (deja vacío el directorio).
-2. Entra al escritorio de WordPress e instala desde *Plugins → Añadir nuevo*: WooCommerce, Rank Math SEO, WP Super Cache, Mercado Pago y WooCommerce PayPal Payments (no hace falta configurarlos: la base importada trae la configuración).
+2. Entra al escritorio de WordPress e instala desde *Plugins → Añadir nuevo*: WooCommerce, Rank Math SEO y WP Super Cache (no hace falta configurarlos: la base importada trae la configuración).
 
 ### 4. Tema, plugin propio y medios por FTP
 
