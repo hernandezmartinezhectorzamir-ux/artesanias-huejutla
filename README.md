@@ -90,6 +90,7 @@ artesanias-huejutla-wp/
 6. Abre `http://localhost/artesanias-wp/`. La administración está en `/wp-admin/` → menú **Gestión TI**.
 
 ### 4.2 Servidor público (producción)
+**Hosting gratuito (InfinityFree):** guía paso a paso en [docs/despliegue-infinityfree.md](docs/despliegue-infinityfree.md). La base de datos es la MySQL incluida en InfinityFree (WordPress no funciona con PostgreSQL/Supabase); `scripts/preparar-migracion.sh` genera la base con las URL cambiadas y el despliegue automático funciona por FTP.
 
 1. Hosting con PHP 8.x, MySQL 8 o MariaDB 10.6+, HTTPS (Let's Encrypt) y acceso SSH con WP-CLI.
 2. Usa `config/wp-config-produccion.example.php` como base. Las credenciales se leen de variables de entorno, y debe usarse un usuario de base de datos dedicado, **nunca root**.

@@ -15,6 +15,7 @@
 # --- Configuración y secretos (NUNCA subir) ---
 wp-config.php
 wp-config-*.php
+!config/*.example.php
 !wp-config-produccion.example.php
 .env
 .env.*
@@ -54,3 +55,6 @@ desktop.ini
 .idea/
 .vscode/
 *.swp
+
+# Paquete de migración (base de datos y medios del sitio)
+/migracion/

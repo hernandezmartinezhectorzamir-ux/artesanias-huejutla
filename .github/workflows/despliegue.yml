@@ -49,6 +49,9 @@ jobs:
       SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
       WP_PATH: ${{ secrets.WP_PATH }}
       SITE_URL: ${{ vars.SITE_URL }}
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+      FTP_DIR: ${{ secrets.FTP_DIR }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -57,11 +60,16 @@ jobs:
       - name: Verificar configuración del entorno
         id: config
         run: |
-          if [ -z "$SSH_HOST" ] || [ -z "$SSH_USER" ] || [ -z "$WP_PATH" ] || [ -z "$SITE_URL" ]; then
-            echo "::warning::Faltan secretos/variables del entorno (SSH_HOST, SSH_USER, SSH_KEY, WP_PATH, SITE_URL). No se despliega."
-            echo "listo=false" >> "$GITHUB_OUTPUT"
+          # Dos modos: SSH (VPS o hosting con terminal) o FTP (hosting compartido sin SSH, p. ej. InfinityFree).
+          if [ -n "$SSH_HOST" ] && [ -n "$SSH_USER" ] && [ -n "$WP_PATH" ] && [ -n "$SITE_URL" ]; then
+            echo "listo=true" >> "$GITHUB_OUTPUT"; echo "ftp=false" >> "$GITHUB_OUTPUT"
+            echo "Modo SSH: respaldo, mantenimiento, rsync y tareas con WP-CLI."
+          elif [ -n "$FTP_SERVER" ] && [ -n "$FTP_USERNAME" ] && [ -n "$FTP_DIR" ] && [ -n "$SITE_URL" ]; then
+            echo "listo=false" >> "$GITHUB_OUTPUT"; echo "ftp=true" >> "$GITHUB_OUTPUT"
+            echo "Modo FTP: se suben solo el tema y el plugin (sin respaldo ni WP-CLI, que requieren SSH)."
           else
-            echo "listo=true" >> "$GITHUB_OUTPUT"
+            echo "::warning::Faltan secretos/variables: SSH_HOST, SSH_USER, SSH_KEY, WP_PATH o FTP_SERVER, FTP_USERNAME, FTP_PASSWORD, FTP_DIR, además de SITE_URL. No se despliega."
+            echo "listo=false" >> "$GITHUB_OUTPUT"; echo "ftp=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Configurar SSH
@@ -109,4 +117,34 @@ jobs:
 
       - name: Verificación posterior (prueba de humo)
         if: steps.config.outputs.listo == 'true'
+        run: bash scripts/prueba-humo.sh "$SITE_URL"
+
+      # ---------- Modo FTP (hosting compartido sin SSH, p. ej. InfinityFree) ----------
+      # Sube solo los archivos que cambiaron (la acción guarda un registro en el servidor).
+      # FTP_DIR = carpeta pública del sitio en el servidor, p. ej. /htdocs/
+      - name: FTP · subir tema
+        if: steps.config.outputs.ftp == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./wp-content/themes/artesanias-huejutla/
+          server-dir: ${{ secrets.FTP_DIR }}wp-content/themes/artesanias-huejutla/
+
+      - name: FTP · subir plugin Gestión TI
+        if: steps.config.outputs.ftp == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./wp-content/plugins/ah-gestion-ti/
+          server-dir: ${{ secrets.FTP_DIR }}wp-content/plugins/ah-gestion-ti/
+
+      # Algunos hostings gratuitos responden a programas (no navegadores) con una página de
+      # verificación por JavaScript; por eso aquí la prueba de humo informa pero no bloquea.
+      - name: FTP · prueba de humo (informativa)
+        if: steps.config.outputs.ftp == 'true'
+        continue-on-error: true
         run: bash scripts/prueba-humo.sh "$SITE_URL"
